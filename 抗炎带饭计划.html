@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双人抗炎带饭计划 · 周制午餐菜谱</title>
+<style>
+  :root {
+    --ink: #2C2C2A;
+    --ink-2: #5F5E5A;
+    --ink-3: #888780;
+    --bg: #FBFAF7;
+    --card: #FFFFFF;
+    --line: #E8E6DE;
+    --green-100: #EAF3DE;
+    --green-600: #3B6D11;
+    --green-800: #27500A;
+    --teal-100: #E1F5EE;
+    --teal-600: #0F6E56;
+    --amber-100: #FAEEDA;
+    --amber-600: #854F0B;
+    --coral-100: #FAECE7;
+    --coral-600: #993C1D;
+    --blue-100: #E6F1FB;
+    --blue-600: #185FA5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 15px;
+    padding: 40px 20px;
+  }
+  .page { max-width: 860px; margin: 0 auto; }
+  header.hero {
+    background: linear-gradient(135deg, #EAF3DE 0%, #E1F5EE 100%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+  }
+  header.hero h1 { font-size: 26px; font-weight: 600; margin-bottom: 10px; color: var(--green-800); }
+  header.hero p { color: var(--ink-2); max-width: 620px; }
+  header.hero .tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12.5px; padding: 3px 12px; border-radius: 999px;
+    background: rgba(255,255,255,.75); color: var(--green-600); border: 1px solid var(--green-600);
+  }
+  h2 {
+    font-size: 20px; font-weight: 600; margin: 44px 0 6px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2 .num {
+    width: 28px; height: 28px; border-radius: 8px; background: var(--green-100);
+    color: var(--green-800); font-size: 14px; display: inline-flex;
+    align-items: center; justify-content: center; flex: none;
+  }
+  .sub { color: var(--ink-3); font-size: 13.5px; margin-bottom: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px 26px; margin-bottom: 14px;
+  }
+  /* 211 plate */
+  .plate-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; }
+  .plate-cell { flex: 1; min-width: 180px; border-radius: 12px; padding: 18px 20px; }
+  .plate-cell h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .plate-cell p { font-size: 13.5px; }
+  .pc-veg { background: var(--green-100); color: var(--green-800); }
+  .pc-pro { background: var(--coral-100); color: var(--coral-600); }
+  .pc-carb { background: var(--amber-100); color: var(--amber-600); }
+  .plate-cell b { font-size: 20px; font-weight: 700; }
+  /* weekly table */
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; font-size: 14px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #F1EFE8; font-weight: 600; font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  td .day { font-weight: 600; white-space: nowrap; }
+  .pill { display: inline-block; font-size: 12px; padding: 1px 10px; border-radius: 999px; margin-top: 4px; white-space: nowrap; }
+  .pill-veg { background: var(--green-100); color: var(--green-800); }
+  .pill-pro { background: var(--coral-100); color: var(--coral-600); }
+  .pill-carb { background: var(--amber-100); color: var(--amber-600); }
+  .pill-blue { background: var(--blue-100); color: var(--blue-600); }
+  /* timeline */
+  .timeline { border-left: 2px solid var(--green-600); margin-left: 10px; padding-left: 22px; }
+  .tstep { position: relative; padding-bottom: 18px; }
+  .tstep::before {
+    content: ""; position: absolute; left: -28px; top: 7px; width: 10px; height: 10px;
+    border-radius: 50%; background: var(--card); border: 2.5px solid var(--green-600);
+  }
+  .tstep .t { font-weight: 600; color: var(--green-800); font-size: 14px; }
+  .tstep .d { font-size: 13.5px; color: var(--ink-2); }
+  /* lists */
+  ul.check { list-style: none; }
+  ul.check li { padding: 4px 0 4px 24px; position: relative; font-size: 14px; }
+  ul.check li::before {
+    content: "✓"; position: absolute; left: 2px; color: var(--green-600); font-weight: 700;
+  }
+  ul.cross li::before { content: "✕"; color: #A32D2D; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .note {
+    background: var(--amber-100); border: 1px solid #F0DFB4; border-radius: 10px;
+    padding: 14px 18px; font-size: 13.5px; color: var(--amber-600); margin-top: 14px;
+  }
+  .note b { color: #633806; }
+  footer { margin-top: 48px; text-align: center; color: var(--ink-3); font-size: 12.5px; }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 14px; font-size: 14px; }
+  .kv dt { color: var(--ink-3); }
+  .kv dd { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="hero">
+  <h1>双人抗炎带饭计划</h1>
+  <p>为两位互联网工作者定制：周一到周五公司微波炉午餐，周日一次集中预制（约 2.5–3 小时），绿叶菜改为「前一晚洗切、早上现炒」。以 211 餐盘法则 + 地中海饮食为骨架，重点照顾熬夜党的眼睛、肝脏和慢性炎症。</p>
+  <div class="tags">
+    <span class="tag">211 法则</span><span class="tag">地中海饮食</span><span class="tag">抗炎食材</span>
+    <span class="tag">微波炉友好</span><span class="tag">周日批量预制</span><span class="tag">两人份</span>
+  </div>
+</header>
+
+<!-- ============ 01 设计原则 ============ -->
+<h2><span class="num">1</span>设计原则：每餐怎么搭</h2>
+<p class="sub">拿到任何一个饭盒，按这个比例目测即可，不需要称重。</p>
+
+<div class="plate-row">
+  <div class="plate-cell pc-veg">
+    <h3>2 拳 · 蔬菜</h3>
+    <p><b>½</b> 深色（西兰花、菠菜、彩椒）<br><b>½</b> 其他（番茄、菌菇、根茎）</p>
+  </div>
+  <div class="plate-cell pc-pro">
+    <h3>1 掌 · 优质蛋白</h3>
+    <p>鱼虾豆为主，禽肉次之，红肉每周 ≤2 次，加工肉基本不碰</p>
+  </div>
+  <div class="plate-cell pc-carb">
+    <h3>1 拳 · 全谷物主食</h3>
+    <p>糙米 / 藜麦 / 荞麦 / 燕麦米 / 全麦意面，替代白米白面</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <dl class="kv">
+    <dt>油脂</dt><dd>橄榄油为主（凉拌用特级初榨，炒炖用精炼），每天一小把坚果（约 15g）</dd>
+    <dt>抗炎担当</dt><dd>深海鱼 omega-3、姜黄、番茄（熟吃茄红素翻倍）、深色蔬菜、豆类、浆果</dd>
+    <dt>促炎黑名单</dt><dd>含糖饮料、油炸食品、加工肉（香肠培根）、精制糖过量</dd>
+    <dt>熬夜加成</dt><dd>叶黄素护眼（深绿叶）、B 族抗疲劳（全谷物鸡蛋）、镁助眠（坚果豆类）、维 C 抗氧化（彩椒番茄）</dd>
+  </dl>
+</div>
+
+<!-- ============ 02 一周菜单 ============ -->
+<h2><span class="num">2</span>一周午餐菜单（两人份）</h2>
+<p class="sub">周一到周五带饭，全部为微波炉复热友好型；周五设计成免加热，给办公室一点松弛感。</p>
+
+<table>
+  <thead>
+    <tr><th>日期</th><th>主菜（蛋白）</th><th>蔬菜</th><th>主食</th><th>亮点</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="day">周一</td>
+      <td>姜黄烤三文鱼<span class="pill pill-pro">omega-3 + 姜黄素</span></td>
+      <td>烤西兰花 + 胡萝卜 + 樱桃番茄<span class="pill pill-veg">叶黄素 / 茄红素</span></td>
+      <td>藜麦糙米饭<span class="pill pill-carb">低 GI</span></td>
+      <td>烤箱一盘出，抗炎天花板</td>
+    </tr>
+    <tr>
+      <td class="day">周二</td>
+      <td>地中海鹰嘴豆炖鸡腿<span class="pill pill-pro">豆 + 禽双蛋白</span></td>
+      <td>炖菜自带番茄彩椒洋葱<span class="pill pill-veg">一锅全含</span></td>
+      <td>糙米饭<span class="pill pill-carb">B 族</span></td>
+      <td>隔夜更入味，懒人福音</td>
+    </tr>
+    <tr>
+      <td class="day">周三</td>
+      <td>番茄炖牛腩<span class="pill pill-pro">血红素铁</span></td>
+      <td>白灼秋葵 / 焯拌蘑菇<span class="pill pill-veg">粘液护胃 · 当日现做</span></td>
+      <td>紫米荞麦饭<span class="pill pill-carb">花青素</span></td>
+      <td>红肉额度 ①，越炖越香</td>
+    </tr>
+    <tr>
+      <td class="day">周四</td>
+      <td>香菇滑鸡（橄榄油版）<span class="pill pill-pro">低脂高蛋白</span></td>
+      <td>蒜蓉菠菜 + 白灼芦笋<span class="pill pill-veg">叶酸 / 叶黄素 · 当日现炒</span></td>
+      <td>藜麦糙米饭<span class="pill pill-carb">低 GI</span></td>
+      <td>前一晚腌好，早上 10 分钟现炒</td>
+    </tr>
+    <tr>
+      <td class="day">周五</td>
+      <td>金枪鱼白豆地中海沙拉<span class="pill pill-pro">omega-3</span></td>
+      <td>樱桃番茄 + 黄瓜 + 紫洋葱<span class="pill pill-veg">生食维 C</span></td>
+      <td>全麦 pita / 法棍<span class="pill pill-carb">免加热</span></td>
+      <td>早上 5 分钟组装，不用抢微波炉</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note"><b>关于绿叶菜：</b>菜单里的菠菜、芦笋、秋葵、蘑菇属于「当日新鲜组」——前一晚洗净切好放保鲜盒冷藏，第二天早上花 5–8 分钟现炒/白灼后装盒。绿叶菜现炒现吃，口感、维 C 和亚硝酸盐控制都是最佳。硬质蔬菜（西兰花、胡萝卜、彩椒）则完全不怕隔夜，归入周日批量组。</div>
+
+<div class="note"><b>周末（周六日）：吃新鲜的。</b>建议清淡家庭餐 + 补一顿富含 omega-3 的鱼。晚餐绿叶菜现炒现吃，把「隔夜绿叶菜」的顾虑留在周末解决。</div>
+
+<!-- ============ 03 周日预制流程 ============ -->
+<h2><span class="num">3</span>周日批量预制流程</h2>
+<p class="sub">核心思路：烤箱和炖锅并行干活，人只做调度。全程约 2.5–3 小时，其中动手时间约 1 小时。</p>
+
+<div class="card">
+  <div class="timeline">
+    <div class="tstep"><div class="t">10:00 · 收菜 & 处理</div><div class="d">硬质蔬菜（西兰花、胡萝卜、彩椒、洋葱）洗净切好；肉类腌制（三文鱼抹姜黄粉+橄榄油+黑胡椒，鸡腿用盐+ paprika）。绿叶菜不属于周日任务，见下方「工作日节奏」</div></div>
+    <div class="tstep"><div class="t">10:30 · 炖锅上线</div><div class="d">番茄牛腩下锅，小火炖 2 小时，期间完全不用管</div></div>
+    <div class="tstep"><div class="t">10:40 · 电饭煲上线</div><div class="d">一次煮 5 天量的杂粮饭（糙米:藜麦:紫米 ≈ 2:1:1，提前泡 30 分钟口感更好）</div></div>
+    <div class="tstep"><div class="t">11:00 · 烤箱上线</div><div class="d">200°C 烤盘：三文鱼 + 西兰花 + 胡萝卜 + 樱桃番茄，20–25 分钟（周一的量）</div></div>
+    <div class="tstep"><div class="t">11:30 · 深锅上线</div><div class="d">鹰嘴豆番茄炖鸡腿（周二的量），炖 30 分钟</div></div>
+    <div class="tstep"><div class="t">12:00 · 分装进冰箱</div><div class="d">熟食稍微降温后（2 小时内）分装：周一~周三的冷藏，周四的熟食和后两天的杂粮饭冷冻</div></div>
+    <div class="tstep"><div class="t">12:15 · 收工</div><div class="d">周五沙拉食材洗净备好不加工；绿叶菜按「前一晚洗切、早上现炒」的节奏走，无需周日处理</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <b>工作日每日节奏（绿叶菜新鲜组 · 每天约 20 分钟总投入）</b>
+  <p style="font-size:14px;color:var(--ink-2)">
+    <b>前一晚（睡前 10 分钟）：</b>菠菜/芦笋/秋葵洗净沥干切好，装保鲜盒垫厨房纸冷藏；香菇滑鸡提前腌好（周四早上直接炒）；需要时把冷冻杂粮饭移到冷藏解冻。<br>
+    <b>早上（10 分钟）：</b>绿叶菜大火快炒或白灼 5–8 分钟趁热装盒；蛋白和主食从冷藏取出直接装盒（炖菜类早已是熟的）；顺手在饭盒侧格放一小罐油醋汁/蘸水。
+  </p>
+</div>
+
+<div class="card">
+  <b>主食供饭 · 三种模式（按方便程度排序，选一种或混用）</b>
+  <table style="margin-top:10px">
+    <thead><tr><th>模式</th><th>操作</th><th>口感</th><th>适合谁</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>A · 周日批量冷冻</b></td>
+        <td>周日一次煮 5 天量，分盒冷冻；早上拿一盒就走，<b>零操作</b></td>
+        <td>微波后接近现煮（冷冻锁水效果好）</td>
+        <td>想彻底解放早晨</td>
+      </tr>
+      <tr>
+        <td><b>B · 电饭煲预约</b></td>
+        <td>前一晚放米加水预约，<b>设成起床前 30–40 分钟煮好</b>；顺手把当晚洗好的绿叶菜放旁边</td>
+        <td>最热乎新鲜</td>
+        <td>反正早上要现炒菜，顺手盛饭</td>
+      </tr>
+      <tr>
+        <td><b>C · 即食包</b></td>
+        <td>超市即食杂粮饭/微波即食糙米包，办公室囤几包</td>
+        <td>及格线以上</td>
+        <td>应急 / 没带饭那天</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:12px">
+    <b>预约煮饭的安全细节：</b>① 预约时长尽量 ≤ 10 小时，夏天高温别超 8 小时（米在水中长时间泡着才需要警惕，预约程序通常最后阶段才升温）；② 杂粮糙米本来就要泡 30 分钟以上，预约模式反而完美解决这个问题；③ 早上刚煮好的热饭装盒直接带走，到公司<b>尽量放冰箱</b>——没有冰箱的话选模式 A 更稳，或者早上装盒后敞盖晾 10 分钟、配冰袋。
+  </div>
+</div>
+
+<div class="card">
+  <b>杂粮饭搭配公式：基础米 + 全谷物 + 点缀</b>
+  <p style="font-size:14px;color:var(--ink-2);margin-bottom:10px">不需要精确配方——挑一种基础、一种全谷物、一种点缀，随手一混就是合格杂粮饭。上限建议 4 种，种类太多口感容易乱。</p>
+  <table>
+    <thead><tr><th>角色</th><th>选这些</th><th>作用 / 备注</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>基础（5 成）</b></td>
+        <td>白米 / 糙米 / 紫米（黑米）</td>
+        <td>保证口感和黏合度；糙米紫米算全谷物，白米做「过渡期」用</td>
+      </tr>
+      <tr>
+        <td><b>全谷物（3–4 成）</b></td>
+        <td>藜麦、燕麦米、荞麦米、小米、大麦、黑米</td>
+        <td>低 GI + B 族主力；任意一两种即可，不用全上</td>
+      </tr>
+      <tr>
+        <td><b>点缀（1–2 成）</b></td>
+        <td>鹰嘴豆、红腰豆、绿豆、薏米、玉米碴</td>
+        <td>豆类让蛋白质翻倍；薏米祛湿；玉米碴添甜香</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:12px">
+    <b>随便混煮可行，但有三个前提：</b><br>
+    ① <b>提前泡</b>——糙米、紫米、薏米、干豆质地硬，泡 2–4 小时（冷藏过夜更好）才能和白米同锅同熟；小米、藜麦、燕麦米不用泡。<b>用电饭煲预约模式时，泡米这步自动解决。</b><br>
+    ② <b>水量略增</b>——比纯白米多加 10–20%（电饭煲有「杂粮饭」档直接用）；<br>
+    ③ <b>循序渐进</b>——肠胃敏感的话从「白米 7 : 杂粮 3」起步，两周后加到 5:5 或杂粮过半，别一步到位到全糙米，容易胀气。
+  </div>
+  <p style="font-size:13.5px;color:var(--ink-3);margin-top:10px">
+    <b>懒人方案：</b>超市直接买「十谷米 / 杂粮米拼配包」，配方已调好，回家免混免算；或者一次自配一大罐（白米 4 : 糙米 2 : 藜麦 1 : 紫米 1 + 一把鹰嘴豆），吃一个月。<br>
+    <b>鹰嘴豆特别说明：</b>① 干豆需提前泡 8–12 小时（冷藏过夜），<b>不需要剥皮</b>——去皮是做超细腻鹰嘴豆泥（hummus）的要求，直接煮饭带皮完全没问题，皮里全是膳食纤维；② 急用可快煮泡法：加水煮开 2 分钟，关火焖 1 小时 ≈ 泡一夜；③ 最省事：<b>罐头鹰嘴豆</b>（或即食装），沥干冲水直接下锅和米同煮，零门槛，也是菜单里「鹰嘴豆炖鸡腿」「白豆沙拉」默认的用法。<br>
+    <b>薯类南瓜可以代替谷物吗？——可以，而且建议轮换。</b>「1 拳主食」不限定谷物，土豆、南瓜、芋头、紫薯、山药、玉米都是合格碳水。几个特点：<b>土豆</b>饱腹感极强、钾含量高（护血压，熬夜党友好）；<b>紫薯</b>花青素抗炎加分，放凉后抗性淀粉增加、GI 更低，特别适合带饭；<b>南瓜</b>β-胡萝卜素丰富但碳水密度低，当主食要吃够量（约谷物 1.5–2 倍体积）；<b>芋头/山药</b>饱腹温和护胃。注意两点：① 薯类的蛋白质比谷物低，替代日可以把点缀豆类加量补回来；② 轮换优于替代——谷物（B 族、低 GI）和薯类（钾、胡萝卜素、花青素）各有所长，一周里 2–3 天换成薯类最理想。带饭友好度满分：微波复热不发硬，南瓜和紫薯甚至可以公司微波炉直接加热（办公室应急方案的升级版）。
+  </p>
+</div>
+
+<!-- ============ 04 采购清单 ============ -->
+<h2><span class="num">4</span>周日采购清单</h2>
+<p class="sub">按超市动线排序，一次买齐。</p>
+
+<div class="grid2">
+  <div class="card">
+    <b style="color:var(--coral-600)">蛋白区</b>
+    <ul class="check">
+      <li>三文鱼 300g（周一）</li>
+      <li>鸡腿 4–6 只（周二）</li>
+      <li>牛腩 500g（周三）</li>
+      <li>鸡胸或琵琶腿 300g（周四）</li>
+      <li>金枪鱼罐头 2 罐（水浸，周五）</li>
+      <li>鸡蛋 1 盒（备用蛋白）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b style="color:var(--green-800)">蔬菜区</b>
+    <ul class="check">
+      <li>西兰花 2 颗、胡萝卜 4 根</li>
+      <li>樱桃番茄 1 盒（烤）+ 1 盒（生）</li>
+      <li>彩椒 3 个、洋葱 2 个</li>
+      <li>秋葵 300g、蘑菇 300g</li>
+      <li>菠菜 1 把、芦笋 1 把</li>
+      <li>黄瓜 2 根、紫洋葱 1 个（周五沙拉）</li>
+      <li>香菇 300g（周四）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b style="color:var(--amber-600)">主食 & 干货</b>
+    <ul class="check">
+      <li>糙米、藜麦、紫米、荞麦（可混一大袋）</li>
+      <li>全麦 pita 或法棍（周五）</li>
+      <li>鹰嘴豆罐头 2 罐（或干豆提前一晚泡）</li>
+      <li>白腰豆罐头 1 罐（周五沙拉）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b style="color:var(--blue-600)">调味 & 其他</b>
+    <ul class="check">
+      <li>橄榄油（特级初榨 + 精炼各一）</li>
+      <li>姜黄粉、黑胡椒、paprika、孜然</li>
+      <li>番茄罐头 2 罐（炖菜灵魂）</li>
+      <li>柠檬 2 个（沙拉汁）</li>
+      <li>原味混合坚果 1 袋（每天下午一把）</li>
+      <li>蓝莓 / 应季浆果（加餐或早餐）</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ 05 复热 & 安全 ============ -->
+<h2><span class="num">5</span>微波复热与食品安全</h2>
+
+<div class="card">
+  <b>复热技巧</b>
+  <ul class="check">
+    <li>米饭上盖一张打湿的厨房纸，中高火 2–3 分钟，恢复松软不发硬</li>
+    <li>炖菜类（咖喱、番茄牛腩）加一勺水再热，防止糊底</li>
+    <li>三文鱼复热会过老：周一那份烤到八成熟，复热 1 分钟即可，中心温热就停</li>
+    <li>分装盒选玻璃或 PP5（盒底三角标 5），带盖留缝防爆</li>
+  </ul>
+</div>
+
+<div class="card">
+  <b>安全红线</b>
+  <ul class="check">
+    <li>熟食从出锅到进冰箱 ≤ 2 小时，别等彻底凉透才放</li>
+    <li>冷藏（4°C）保存 ≤ 3 天，第 4–5 天的必须冷冻</li>
+    <li>米饭切勿室温过夜（蜡样芽孢杆菌风险），煮好尽快分装冷藏</li>
+    <li>复热要热透（中心约 75°C / 烫嘴），且只复热一次，别反复加热</li>
+  </ul>
+</div>
+
+<div class="note">
+  <b>关于「隔夜菜亚硝酸盐」：</b>实验数据表明，烹调后冷藏 24 小时的蔬菜亚硝酸盐含量仍远低于安全限量，不必恐慌。真正要注意的是<b>室温放置</b>和<b>保存超过 3 天</b>。凉拌生食、焯水绿叶菜建议 24 小时内吃完，炖煮类蔬菜则很稳。
+</div>
+
+<div class="note"><b>关于「橄榄油烟点低不能炒菜」——流传很广的误解：</b><br>
+① <b>数字本身被低估</b>：特级初榨（EVOO）烟点约 190–210°C，精炼橄榄油 230–240°C。家常炒菜油温实际在 150–180°C，炖煮更低（水的沸点 100°C 封顶）。日常火力完全够用，只有中式爆炒（油冒烟下锅）才真正超。<br>
+② <b>烟点 ≠ 稳定性</b>：近年的油脂氧化研究（如澳洲橄榄油协会等多组实验）表明，烟点和油加热后的实际劣变程度相关性很差。EVOO 富含多酚和维 E 等抗氧化物，高温下反而比很多高烟点精炼油（如精炼葵花籽油）更耐氧化、产生的极性物质更少。<br>
+③ <b>本方案的用法</b>：凉拌/油醋汁/出锅淋 → 特级初榨（多酚是抗炎主力，别浪费在高温上）；日常炒菜/煎烤 → 精炼橄榄油或 EVOO 中小火都可以；炖菜 → 任意一种都零压力。真要爆炒（比如爆炒腰花这种）用精炼橄榄油即可。<br>
+④ <b>成本提示</b>：精炼橄榄油比 EVOO 便宜，炒炖用它不心疼；EVOO 留给生食场景，一滴都不浪费。</div>
+
+<!-- ============ 06 办公室应急 ============ -->
+<h2><span class="num">6</span>办公室「免做菜」应急方案</h2>
+<p class="sub">给公司抽屉配一个风味补给站——全是可选项，不是硬性要求。营养和美味优先，这是没带饭、加班、临时加餐时的兜底。</p>
+
+<div class="grid2">
+  <div class="card">
+    <b style="color:var(--blue-600)">抽屉常备 · 风味补给站</b>
+    <ul class="check">
+      <li>特级初榨橄榄油小瓶 + 黑胡椒海盐</li>
+      <li>油醋汁小瓶或「酱油+米醋」自制蘸水，冷藏一周没问题</li>
+      <li>芝麻海苔碎、辣椒面、孜然——让复热菜不寡淡</li>
+      <li>水浸金枪鱼/沙丁鱼罐头、即食鹰嘴豆（应急蛋白+主食）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <b style="color:var(--green-800)">公司微波炉 3 分钟速成</b>
+    <ul class="check">
+      <li>微波蒸蛋杯：蛋液+水+虾仁/玉米，3 分钟滑嫩</li>
+      <li>微波蔬菜：洗净西兰花/芦笋加一勺水，盖盖 2–3 分钟</li>
+      <li>即食谷物杯（燕麦/藜麦片）加热水 = 快速主食</li>
+      <li>随手组合也是 211：罐头鱼（蛋白）+ 即食豆（主食）+ 微波菜</li>
+    </ul>
+  </div>
+</div>
+
+<div class="note"><b>蘸水/油醋汁怎么用最妙：</b>绿叶菜早上现炒后、饭盒出发前淋一点，到中午刚好入味；复热偏干的炖菜，微波前拌半勺也能救活口感。经典配比 <b>橄榄油 : 醋(或柠檬汁) : 第戎芥末 ≈ 3:1:1</b>，加点蜂蜜蒜末就是万能油醋汁——抗炎油脂、开胃、低糖三不误。</div>
+
+<!-- ============ 07 替换表 ============ -->
+<h2><span class="num">7</span>吃腻了怎么换（等量替换）</h2>
+<table>
+  <thead><tr><th>角色</th><th>可替换选项</th><th>备注</th></tr></thead>
+  <tbody>
+    <tr><td>三文鱼</td><td>鲈鱼、鳕鱼、沙丁鱼、鲭鱼</td><td>同为 omega-3 优质来源</td></tr>
+    <tr><td>鸡腿</td><td>鸡胸、豆腐、天贝</td><td>豆腐版做成「番茄炖豆腐」同样成立</td></tr>
+    <tr><td>牛腩</td><td>瘦牛腱、羊腿肉</td><td>红肉每周 2 次封顶</td></tr>
+    <tr><td>藜麦/糙米</td><td>燕麦米、荞麦、小米、全麦意面、鹰嘴豆</td><td>豆类直接当主食 = 蛋白质翻倍</td></tr>
+    <tr><td>金枪鱼沙拉</td><td>烤鸡沙拉、鸡蛋吞拿鱼沙拉、白豆沙拉</td><td>保持「免加热 + 橄榄油柠檬汁」框架</td></tr>
+    <tr><td>任意蔬菜</td><td>遵守「一半深色」原则随意换</td><td>颜色越深，抗炎成分越浓</td></tr>
+  </tbody>
+</table>
+
+<footer>双人抗炎带饭计划 · 周期循环：周日批量预制 → 工作日每晚洗绿叶菜、早上现炒 → 每季换一轮菜单防止吃腻</footer>
+</div>
+</body>
+</html>

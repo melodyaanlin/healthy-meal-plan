@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>好好吃饭 · 健康带饭周计划</title>
+<style>
+  :root {
+    --ink: #2E2A24; --ink-2: #5D574C; --ink-3: #948C7E;
+    --bg: #F4F0E7; --card: #FDFBF6; --line: #E6DFD1; --line-2: #EFEAE0;
+    /* 保留原变量名，值全部换成暖调低饱和色 */
+    --green-100: #EAEBDF; --green-600: #6B7048; --green-800: #4F5433;   /* 橄榄 */
+    --teal-100: #E5EBE6; --teal-600: #56705F;                            /* 鼠尾草 */
+    --amber-100: #EFE7D4; --amber-600: #8B6A33;                          /* 燕麦金 */
+    --coral-100: #F1E3D7; --coral-600: #9C5B38;                          /* 陶土 */
+    --blue-100: #E7E8E4; --blue-600: #5A6259;                            /* 暖灰绿 */
+    --espresso: #3F3A31; --espresso-2: #332F27;
+    --serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.75; font-size: 15px; padding: 48px 20px 56px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 960px; margin: 0 auto; }
+  header.hero {
+    background: linear-gradient(160deg, #F2EBDC 0%, #EBE3D0 100%);
+    border: 1px solid #E0D7C3; border-radius: 20px; padding: 44px 48px; margin-bottom: 36px;
+    position: relative; overflow: hidden;
+  }
+  header.hero::after {
+    content: "食"; position: absolute; right: 28px; top: -34px;
+    font-family: var(--serif); font-size: 190px; line-height: 1;
+    color: rgba(156, 91, 56, .07); pointer-events: none;
+  }
+  /* 季节气质：hero 渐变与「食」水印随季节换色调 */
+  body.s-spring header.hero { background: linear-gradient(160deg, #F1ECDD 0%, #E7ECDA 100%); }
+  body.s-spring header.hero::after { color: rgba(116, 138, 92, .10); }
+  body.s-summer header.hero { background: linear-gradient(160deg, #F4EED9 0%, #EAE8C9 100%); }
+  body.s-summer header.hero::after { color: rgba(184, 135, 74, .10); }
+  body.s-autumn header.hero { background: linear-gradient(160deg, #F2EBDC 0%, #EBE3D0 100%); }
+  body.s-autumn header.hero::after { color: rgba(156, 91, 56, .07); }
+  body.s-winter header.hero { background: linear-gradient(160deg, #F0F1EC 0%, #E3E8E7 100%); }
+  body.s-winter header.hero::after { color: rgba(92, 113, 134, .10); }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .38em; text-transform: uppercase;
+    color: var(--coral-600); font-weight: 600; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: ""; height: 1px; width: 40px; flex: none;
+    background: linear-gradient(90deg, transparent, #C99A76);
+  }
+  .eyebrow::after { background: linear-gradient(90deg, #C99A76, transparent); }
+  header.hero h1 {
+    font-family: var(--serif); font-size: 30px; font-weight: 600; letter-spacing: .02em;
+    margin-bottom: 12px; color: var(--ink);
+  }
+  header.hero p { color: var(--ink-2); max-width: 660px; font-size: 14px; position: relative; z-index: 1; }
+  h2 {
+    font-family: var(--serif); font-size: 21px; font-weight: 600; letter-spacing: .02em;
+    margin: 48px 0 8px; display: flex; align-items: center; gap: 12px;
+  }
+  h2 .num {
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid #D6CCB6;
+    background: transparent; color: var(--coral-600); font-family: var(--serif);
+    font-size: 13px; display: inline-flex; align-items: center; justify-content: center; flex: none;
+  }
+  .sub { color: var(--ink-3); font-size: 13.5px; margin-bottom: 14px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(70, 58, 38, .04);
+  }
+  /* week table */
+  .week-table { width: 100%; border-collapse: collapse; }
+  .week-table th {
+    font-size: 11.5px; font-weight: 600; letter-spacing: .12em; text-align: left;
+    padding: 8px 10px; border-bottom: 1px solid #DDD4C0;
+  }
+  .th-main { color: var(--coral-600); } .th-veg { color: var(--green-600); } .th-carb { color: var(--amber-600); } .th-tea { color: var(--teal-600); }
+  .week-table td { padding: 7px 8px; border-bottom: 1px dashed var(--line-2); vertical-align: middle; }
+  .week-table tr:last-child td { border-bottom: none; }
+  .day-cell { font-weight: 600; font-size: 14px; width: 56px; color: var(--ink-2); }
+  .day-cell .dsub { display: block; font-size: 11px; color: var(--ink-3); font-weight: 400; }
+  .week-table select {
+    width: 100%; padding: 7px 26px 7px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: #FFFDF8; font-size: 13.5px; color: var(--ink); font-family: inherit; cursor: pointer;
+    appearance: none; -webkit-appearance: none; transition: border-color .15s;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23948C7E' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+  .week-table select:hover { border-color: #CFC4AC; }
+  .week-table select:focus { outline: none; border-color: var(--coral-600); }
+  .row-dice {
+    width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line);
+    background: transparent; cursor: pointer; font-size: 15px; line-height: 1; color: var(--ink-2);
+    transition: border-color .15s, color .15s;
+  }
+  .row-dice:hover { border-color: var(--coral-600); color: var(--coral-600); }
+  .row-flag { font-size: 11.5px; color: var(--ink-3); white-space: nowrap; }
+  .row-flag b { color: var(--amber-600); font-weight: 600; }
+  .tools-cell { white-space: nowrap; }
+  .mini-btn {
+    width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--line);
+    background: transparent; cursor: pointer; font-size: 12px; line-height: 1; color: var(--ink-2);
+    margin-right: 3px; vertical-align: middle; transition: border-color .15s, color .15s;
+  }
+  .mini-btn:hover { border-color: var(--coral-600); color: var(--coral-600); }
+  .mini-btn:disabled { opacity: .3; cursor: default; }
+  .mini-btn.btn-skip { width: auto; padding: 0 9px; font-size: 12px; }
+  .mini-btn.btn-skip.on { background: var(--coral-100); border-color: var(--coral-600); color: var(--coral-600); }
+  tr.skipped td { opacity: .38; }
+  tr.skipped td.day-cell, tr.skipped td.tools-cell { opacity: 1; }
+  tr.skipped select { pointer-events: none; }
+  tr.skipped .day-cell .dsub { color: var(--coral-600); }
+  /* inventory chips */
+  .inv-group { margin-top: 10px; }
+  .inv-group h4 { font-size: 12.5px; font-weight: 600; margin-bottom: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px;
+    padding: 2px 12px; font-size: 12.5px; cursor: pointer; user-select: none; background: transparent; color: var(--ink-2);
+    transition: border-color .15s, background .15s;
+  }
+  .chip:hover { border-color: #C99A76; }
+  .chip.on { background: var(--coral-100); border-color: #C99A76; color: #7C4A2C; }
+  .have { color: var(--green-600); }
+  .inv-ctrl { margin-top: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  button.big {
+    padding: 10px 22px; border-radius: 10px; border: 1px solid var(--espresso);
+    background: var(--espresso); color: #F7F3E9; font-size: 13.5px; letter-spacing: .05em;
+    font-family: inherit; cursor: pointer; transition: background .15s;
+  }
+  button.big:hover { background: var(--espresso-2); }
+  button.ghost { background: transparent; color: #4A443A; border-color: #CFC6B2; }
+  button.ghost:hover { background: transparent; border-color: var(--ink-2); color: var(--ink); }
+  .controls .hint { font-size: 12.5px; color: var(--ink-3); }
+  /* stats */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .stat { border: 1px solid var(--line); border-radius: 12px; padding: 11px 15px; background: #FBF8F1; }
+  .stat .k { font-size: 12px; color: var(--ink-3); letter-spacing: .04em; }
+  .stat .v { font-size: 15px; font-weight: 600; margin-top: 1px; }
+  .stat .v small { font-size: 11.5px; font-weight: 400; color: var(--ink-3); }
+  .ok { color: var(--green-600); } .warn { color: var(--coral-600); }
+  /* timeline */
+  .timeline { border-left: 1px solid #C9BFA9; margin-left: 8px; padding-left: 22px; }
+  .tstep { position: relative; padding-bottom: 14px; }
+  .tstep::before {
+    content: ""; position: absolute; left: -27px; top: 8px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--card); border: 2px solid var(--coral-600);
+  }
+  .tstep .t { font-weight: 600; color: #7C4A2C; font-size: 14px; font-family: var(--serif); letter-spacing: .02em; }
+  .tstep .d { font-size: 13.5px; color: var(--ink-2); }
+  .tstep .d b { color: var(--ink); font-weight: 600; }
+  .tstep.wed { border-left: none; }
+  .tstep.wed::before { border-color: var(--teal-600); }
+  /* shopping */
+  .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .shop-grid { grid-template-columns: 1fr; } }
+  .shop-cat { border: 1px solid var(--line); border-radius: 12px; padding: 15px 19px; background: var(--card); }
+  .shop-cat h4 { font-size: 13.5px; font-weight: 600; margin-bottom: 6px; letter-spacing: .04em; }
+  .shop-cat ul { list-style: none; }
+  .shop-cat li { font-size: 13.5px; padding: 3px 0; color: var(--ink-2); border-bottom: 1px dashed var(--line-2); }
+  .shop-cat li:last-child { border-bottom: none; }
+  .shop-cat li b { color: var(--ink); font-weight: 500; }
+  .shop-cat li .q { color: var(--ink-3); font-size: 12.5px; }
+  .shop-cat li .q.have { color: var(--green-600); }
+  /* tips */
+  .tip { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line-2); font-size: 13.5px; }
+  .tip:last-child { border-bottom: none; }
+  .tip .badge {
+    flex: none; font-size: 11.5px; font-weight: 600; padding: 2px 10px; border-radius: 999px; height: fit-content; margin-top: 2px;
+    background: #F5F0E4; letter-spacing: .04em;
+  }
+  .note {
+    background: #F1E9D6; border: 1px solid #E4D8BD; border-radius: 12px;
+    padding: 13px 17px; font-size: 13.5px; color: #7A6233; margin-top: 14px;
+  }
+  .note b { color: #5D4A1F; }
+  .static-line { font-size: 13.5px; color: var(--ink-2); padding: 5px 0; }
+  .static-line b { color: var(--ink); }
+  /* season chips */
+  .season-chips { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .schip {
+    border: 1px solid var(--line); border-radius: 999px; padding: 4px 16px; cursor: pointer;
+    background: transparent; font-size: 13px; color: var(--ink-2); user-select: none;
+    transition: all .15s; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .schip .si { font-size: 14px; line-height: 1; }
+  .schip:hover { border-color: #C99A76; }
+  .schip.on { background: var(--espresso); border-color: var(--espresso); color: #F7F3E9; font-weight: 500; }
+  .schip.on.s-spring { background: #748A5C; border-color: #748A5C; }
+  .schip.on.s-summer { background: #B8874A; border-color: #B8874A; }
+  .schip.on.s-autumn { background: #9C5B38; border-color: #9C5B38; }
+  .schip.on.s-winter { background: #5C7186; border-color: #5C7186; }
+  .seasonal { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: var(--green-100); color: var(--green-600); margin-left: 6px; white-space: nowrap; }
+  .offseason { background: var(--amber-100); color: var(--amber-600); }
+  /* theory table */
+  .theory-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .theory-table th { text-align: left; padding: 6px 8px; border-bottom: 1px solid #DDD4C0; font-size: 11.5px; letter-spacing: .12em; }
+  .theory-table td { padding: 8px; border-bottom: 1px dashed var(--line-2); vertical-align: top; color: var(--ink-2); line-height: 1.6; }
+  .theory-table tr:last-child td { border-bottom: none; }
+  .theory-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; font-family: var(--serif); }
+  .theory-table td:nth-child(2) { min-width: 260px; }
+  /* afternoon tea */
+  .tea-cell { min-width: 150px; }
+  .tea-detail { font-size: 11.5px; color: var(--ink-3); line-height: 1.5; margin-top: 3px; }
+  .tea-detail b { color: var(--teal-600); font-weight: 600; }
+  footer {
+    margin-top: 52px; text-align: center; color: var(--ink-3); font-size: 12.5px;
+    padding-top: 22px; border-top: 1px solid var(--line); font-family: var(--serif); letter-spacing: .04em;
+  }
+  footer::before {
+    content: "❋"; display: block; font-size: 15px; color: #C9BFA9;
+    margin-bottom: 8px; line-height: 1;
+  }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<div class="page">
+<h2 class="sr-only">好好吃饭 · 健康带饭周计划：为一周五天各选一套菜，自动生成整周预制流程和合并采购清单</h2>
+
+<header class="hero">
+  <p class="eyebrow">Weekly Meal Plan · 两人食</p>
+  <h1>好好吃饭 · 一周健康带饭</h1>
+  <p>一周五天，每天一套「主菜 + 蔬菜 + 主食 + 下午茶」，四栏规则完全一致：下拉任选、↻ 一起换、外食一起剔除。智能排周的规则是 <b>211 法则、地中海、DASH、MIND、WHO 健康饮食指南、美国膳食指南 2025–2030、中国居民膳食指南（2022）七套主流框架的交集执行版</b>（见第 6 区速查表）。先选季节（应季食材优先、更鲜更便宜），选完自动产出：一周总览 → 周末预制流程（自动分批）→ 全周合并采购清单（含下午茶的水果坚果）→ 相关小贴士。</p>
+</header>
+
+<!-- 1 week picker -->
+<h2><span class="num">1</span>排一周菜单</h2>
+<p class="sub">先选季节（影响应季标记、排菜偏好和下午茶推荐），再排菜：每天四栏任选（主菜 / 蔬菜 / 主食 / 下午茶）；↻ 只重抽当天；「外食」把某天整体剔除；↑↓ 对调两天的顺序。计划赶不上变化时直接改下拉，下面所有内容实时重算。</p>
+<div class="card">
+  <div class="season-chips" id="seasonChips"></div>
+  <table class="week-table">
+    <thead><tr>
+      <th></th><th class="th-main">🍗 主菜 · 1 掌蛋白</th><th class="th-veg">🥦 蔬菜 · 2 拳</th><th class="th-carb">🍚 主食 · 1 拳</th><th class="th-tea">🫐 下午茶 · 加餐</th><th>调整</th><th>这天早上的活</th>
+    </tr></thead>
+    <tbody id="weekBody"></tbody>
+  </table>
+  <div class="controls">
+    <button class="big" id="btnSmart">智能排周（推荐）</button>
+    <button class="big ghost" id="btnRandom">纯随机整周</button>
+    <span class="hint">智能排周规则：主菜不重样 · 红肉 ≤ 2 天 · 鱼类 ≥ 1 天 · 植物蛋白 ≥ 1 天 · 早上现做项不过载</span>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h3 style="font-size:15px;font-weight:600;margin-bottom:2px">冰箱里有什么？（清冰箱模式）</h3>
+  <p class="sub" style="margin-bottom:2px">出门采购前勾一下现有食材：点「按冰箱排周」会优先安排能用掉它们的菜，采购清单也会自动标出哪些不用买。临时改主意 / 剩了食材，随时回来重新勾。</p>
+  <div id="invBox"></div>
+  <div class="inv-ctrl">
+    <button class="big" id="btnFridge">按冰箱排周</button>
+    <button class="big ghost" id="btnClearInv">清空勾选</button>
+    <span class="hint" id="invHint">还没勾选。列表只包含菜谱里用得到的食材，不用翻配料表。</span>
+  </div>
+</div>
+
+<!-- 2 week overview -->
+<h2><span class="num">2</span>一周总览</h2>
+<div class="card">
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="note" id="weekNote"></div>
+</div>
+
+<!-- 3 prep flow -->
+<h2><span class="num">3</span>预制流程（自动分批）</h2>
+<p class="sub">冷藏安全期只有 3 天，所以流程自动拆成两批：周日做周一–周三，周四–周五要么冷冻、要么周三晚现补。</p>
+<div class="card"><div class="timeline" id="timeline"></div></div>
+
+<!-- 4 shopping -->
+<h2><span class="num">4</span>采购清单（全周合并）</h2>
+<p class="sub" id="shopSub"></p>
+<div class="shop-grid" id="shopGrid"></div>
+
+<!-- 5 tips -->
+<h2><span class="num">5</span>本周小贴士</h2>
+<p class="sub">只显示和你这周菜单相关的提示。</p>
+<div class="card" id="tipsBox"></div>
+
+<!-- 6 theory -->
+<h2><span class="num">6</span>营养理论速查（这套菜单背后的依据）</h2>
+<p class="sub">「智能排周」的每条规则都不是拍脑袋，是下面七套主流指南的交集。</p>
+<div class="card">
+  <table class="theory-table">
+    <thead><tr><th>框架</th><th>核心主张</th><th>在本规划器里的落地</th></tr></thead>
+    <tbody>
+      <tr><td>211 法则<br><span style="font-weight:400;font-size:11.5px;color:var(--ink-3)">哈佛健康餐盘</span></td>
+          <td>每餐 2 拳蔬菜 : 1 掌蛋白 : 1 拳全谷主食，比例直观、不看热量表</td>
+          <td>选菜区三栏结构本身就是 211；「两拳菜、一掌肉、一拳饭」口诀</td></tr>
+      <tr><td>地中海饮食</td>
+          <td>橄榄油 + 深海鱼 + 全谷 + 豆类 + 蔬果 + 坚果；红肉甜食少；连年「最佳综合饮食」榜首</td>
+          <td>橄榄油双瓶分工、鱼 ≥ 1 天起步、豆类点缀进主食、下午茶坚果</td></tr>
+      <tr><td>DASH 得舒饮食</td>
+          <td>为降血压设计：高钾镁钙纤维、低钠（&lt;2300mg/天）、奶制品每天 2–3 份</td>
+          <td>土豆/深绿叶/杂粮供钾镁，全菜谱控盐，下午茶补低脂奶和无糖酸奶</td></tr>
+      <tr><td>MIND 健脑饮食</td>
+          <td>地中海 + DASH 的护脑合成版：绿叶菜每天、浆果每周 ≥ 2、坚果每天、鱼禽豆为主、限红肉黄油糕点；坚持度高者认知衰退更慢</td>
+          <td>深色蔬菜天数统计、红肉 ≤ 2 天、下午茶浆果 + 坚果；熬夜用脑党重点对齐</td></tr>
+      <tr><td>WHO 健康饮食指南</td>
+          <td>每天蔬果 ≥ 400g、游离糖 &lt;10%（最好 &lt;5%）能量、盐 &lt;5g/天、脂肪以不饱和为主</td>
+          <td>蔬菜两拳起步、促炎黑名单第一位就是含糖饮料、调味全靠香料不靠糖盐</td></tr>
+      <tr><td>美国膳食指南<br><span style="font-weight:400;font-size:11.5px;color:var(--ink-3)">2025–2030</span></td>
+          <td>「每一口都算数（Every Bite Counts）」：钠 &lt;2300mg、添加糖 &lt;10% 能量、饱和脂肪 &lt;10%；多吃蔬果全谷豆类坚果海产品，从生命早期建立健康饮食模式</td>
+          <td>鱼类天数统计、全谷主食为默认、黑名单对齐添加糖；把健康模式固化成每周例行</td></tr>
+      <tr><td>中国居民膳食指南<br><span style="font-weight:400;font-size:11.5px;color:var(--ink-3)">2022 版</span></td>
+          <td>食物多样（每周 ≥ 25 种食材）；多吃蔬果、奶类、全谷、大豆；盐 &lt;5g、油 25–30g；每周至少 2 次水产品</td>
+          <td>采购清单自动统计食材种类、鱼类建议 ≥ 2 天、下午茶三件套（奶/水果/坚果）</td></tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:14px"><b>交集一句话：</b>多蔬果、全谷、豆类、鱼、坚果，少糖、少盐、少加工。本工具把这些指南翻译成了能执行的约束和按钮——你只管选菜，规则在后台跑。</div>
+</div>
+
+<!-- 7 static -->
+<h2><span class="num">7</span>通用法则（不随菜单变）</h2>
+<div class="card">
+  <p class="static-line"><b>211 结构：</b>两拳蔬菜（一半深色）、一掌蛋白（鱼豆为主）、一拳全谷物或薯类主食；口诀「两拳菜、一掌肉、一拳饭」。</p>
+  <p class="static-line"><b>油脂：</b>生食淋拌用特级初榨橄榄油（多酚抗炎主力），炒炖用精炼橄榄油——EVOO 烟点 190–210°C、家常炒菜 150–180°C 完全够用。</p>
+  <p class="static-line"><b>促炎黑名单：</b>含糖饮料、油炸食品、加工肉（香肠培根）、精制糖过量。</p>
+  <p class="static-line"><b>安全红线：</b>熟食出锅 2 小时内进冰箱；冷藏 ≤ 3 天，第 4 天起必须冷冻；米饭勿室温过夜；复热热透且只热一次。</p>
+  <p class="static-line"><b>办公室补给站（可选）：</b>抽屉备橄榄油小瓶、油醋汁（橄榄油:醋:芥末 ≈ 3:1:1）、芝麻海苔碎、水浸鱼罐头、即食鹰嘴豆。</p>
+  <p class="static-line"><b>熬夜加成：</b>叶黄素（深绿叶）、omega-3（深海鱼）、B 族（全谷物鸡蛋）、镁（坚果豆类）、维 C（彩椒番茄）。</p>
+  <p class="static-line"><b>应季原则：</b>同一种食材，当季的营养密度更高、价格更低、农残和储存损耗更少——换季时记得点顶部的季节切换。</p>
+</div>
+
+<footer>好好吃饭 · 健康带饭周计划 · 规则来自 211 / 地中海 / DASH / MIND / WHO / 中美膳食指南的交集 · 每周点一次「智能排周」= 一周菜单 + 下午茶 + 采购单 · 换季重来</footer>
+</div>
+
+<script>
+const MAINS = [
+  {id:'salmon', name:'姜黄烤三文鱼', type:'oven', tags:['omega-3','姜黄素'], fish:true,
+   ing:[{n:'三文鱼',q:300,u:'g',cat:'蛋白'}], season:['姜黄粉','黑胡椒'],
+   prep:'抹姜黄粉 + 橄榄油 + 黑胡椒，200°C 烤 15–18 分钟至八成熟', dur:'20 分钟',
+   tip:'复热只 1 分钟，中心温热即停，久热变柴'},
+  {id:'chickStew', name:'地中海鹰嘴豆炖鸡腿', type:'stew', tags:['豆+禽双蛋白'],
+   ing:[{n:'琵琶鸡腿',q:4,u:'只',cat:'蛋白'},{n:'鹰嘴豆罐头',q:1,u:'罐',cat:'主食干货'},{n:'番茄罐头',q:0.5,u:'罐',cat:'主食干货'},{n:'彩椒',q:1,u:'个',cat:'蔬菜'},{n:'洋葱',q:1,u:'个',cat:'蔬菜'}], season:['paprika','孜然'],
+   prep:'炒香洋葱彩椒，下鸡腿 + 鹰嘴豆 + 番茄罐头，小火炖 30–40 分钟', dur:'40 分钟',
+   tip:'隔夜更入味，最省心的炖菜'},
+  {id:'beefTomato', name:'番茄炖牛腩', type:'stew', tags:['血红素铁'], red:true,
+   ing:[{n:'牛腩',q:500,u:'g',cat:'蛋白'},{n:'番茄罐头',q:1,u:'罐',cat:'主食干货'},{n:'洋葱',q:1,u:'个',cat:'蔬菜'}], season:['盐','黑胡椒'],
+   prep:'牛腩焯水后与番茄罐头同炖 2 小时，期间不用管', dur:'2 小时',
+   tip:'红肉每周 ≤ 2 次；一锅可以分两餐吃'},
+  {id:'mushChick', name:'香菇滑鸡', type:'morning', tags:['低脂高蛋白'],
+   ing:[{n:'去骨鸡腿肉',q:300,u:'g',cat:'蛋白'},{n:'鲜香菇',q:300,u:'g',cat:'蔬菜'}], season:['盐','少许淀粉'],
+   prep:'前一晚用盐 + 少许淀粉腌好冷藏，早上大火快炒 8–10 分钟', dur:'早上 10 分钟',
+   tip:'现炒口感最好，和绿叶菜一起早上顺手搞定'},
+  {id:'cod', name:'柠檬蒜香烤鳕鱼', type:'oven', tags:['omega-3','低脂'], fish:true,
+   ing:[{n:'鳕鱼或鲈鱼',q:300,u:'g',cat:'蛋白'},{n:'柠檬',q:1,u:'个',cat:'蔬菜'}], season:['蒜末','橄榄油'],
+   prep:'铺柠檬片 + 蒜末，200°C 烤 15 分钟', dur:'18 分钟'},
+  {id:'shrimpTofu', name:'番茄虾仁炖豆腐', type:'stew', tags:['高蛋白低脂'],
+   ing:[{n:'虾仁',q:250,u:'g',cat:'蛋白'},{n:'老豆腐',q:1,u:'块',cat:'蛋白'},{n:'番茄罐头',q:0.5,u:'罐',cat:'主食干货'}], season:['盐','葱花'],
+   prep:'豆腐煎至微黄，加番茄和虾仁焖 10 分钟', dur:'20 分钟'},
+  {id:'curryChick', name:'咖喱鹰嘴豆炖蔬菜（素）', type:'stew', tags:['植物蛋白'], plant:true,
+   ing:[{n:'鹰嘴豆罐头',q:1,u:'罐',cat:'主食干货'},{n:'西葫芦',q:1,u:'根',cat:'蔬菜'},{n:'彩椒',q:1,u:'个',cat:'蔬菜'},{n:'洋葱',q:0.5,u:'个',cat:'蔬菜'}], season:['咖喱粉(无糖)','姜黄粉'],
+   prep:'蔬菜炒软，加鹰嘴豆和水没过食材，炖 20 分钟', dur:'25 分钟',
+   tip:'植物蛋白日，搭配鹰嘴豆饭蛋白质直接拉满'},
+  {id:'pepperBeef', name:'彩椒牛肉丝', type:'morning', tags:['补铁'], red:true,
+   ing:[{n:'牛里脊',q:250,u:'g',cat:'蛋白'},{n:'彩椒',q:2,u:'个',cat:'蔬菜'}], season:['生抽','淀粉'],
+   prep:'前一晚切丝腌制，早上大火快炒 5 分钟', dur:'早上 8 分钟',
+   tip:'牛肉变色即起锅，炒过头就柴了'},
+  {id:'herbChick', name:'香草烤鸡胸', type:'oven', tags:['高蛋白'],
+   ing:[{n:'鸡胸',q:2,u:'块',cat:'蛋白'}], season:['意式混合香草','盐'],
+   prep:'拍平抹调料腌 30 分钟，200°C 烤 18–20 分钟', dur:'25 分钟'},
+  {id:'tunaEgg', name:'金枪鱼鸡蛋沙拉', type:'nocook', tags:['免加热','omega-3'], fish:true,
+   ing:[{n:'水浸金枪鱼罐头',q:2,u:'罐',cat:'蛋白'},{n:'鸡蛋',q:4,u:'个',cat:'蛋白'},{n:'白腰豆罐头',q:1,u:'罐',cat:'主食干货'}], season:['第戎芥末','黑胡椒'],
+   prep:'鸡蛋周日煮好剥壳，其余当天组装，淋油醋汁', dur:'15 分钟',
+   tip:'全程不用微波炉，适合不想排队热饭的中午'},
+  {id:'spiceBeef', name:'香料卤牛腱', type:'stew', tags:['高蛋白','可分装冷冻'], red:true,
+   ing:[{n:'牛腱',q:500,u:'g',cat:'蛋白'}], season:['八角','香叶','花椒','生抽'],
+   prep:'与香料同炖 90 分钟，晾凉切厚片', dur:'90 分钟',
+   tip:'切片分装冷冻能吃两三周，是万能备用蛋白'},
+  {id:'shrimpEgg', name:'虾仁滑蛋', type:'morning', tags:['快手','高蛋白'],
+   ing:[{n:'虾仁',q:200,u:'g',cat:'蛋白'},{n:'鸡蛋',q:4,u:'个',cat:'蛋白'}], season:['盐','白胡椒'],
+   prep:'早上现做 8 分钟，蛋液裹住虾仁即出锅', dur:'早上 8 分钟'},
+  {id:'mackerel', name:'烤鲭鱼（青花鱼）', type:'oven', tags:['omega-3 顶配','高性价比'], fish:true,
+   ing:[{n:'鲭鱼(青花鱼)',q:1,u:'条约300g',cat:'蛋白'},{n:'柠檬',q:1,u:'个',cat:'蔬菜'}], season:['盐','橄榄油'],
+   prep:'抹盐和橄榄油，皮朝上 200°C 烤 12–15 分钟，出锅挤柠檬汁', dur:'18 分钟',
+   tip:'omega-3 含量比肩三文鱼、价格便宜一半，DHA 对熬夜用脑友好'}
+];
+
+const VEGS = [
+  {id:'roastBroc', name:'烤西兰花拼盘', type:'oven', tags:['叶黄素','不怕隔夜'],
+   ing:[{n:'西兰花',q:1,u:'颗',cat:'蔬菜'},{n:'胡萝卜',q:2,u:'根',cat:'蔬菜'},{n:'樱桃番茄',q:1,u:'盒',cat:'蔬菜'}], season:['橄榄油','盐'],
+   prep:'拌橄榄油和盐，200°C 烤 20 分钟', dur:'22 分钟'},
+  {id:'okra', name:'白灼秋葵', type:'morning', tags:['粘液护胃'],
+   ing:[{n:'秋葵',q:300,u:'g',cat:'蔬菜'}], season:['生抽','蒜末'],
+   prep:'前一晚洗净，早上焯 3 分钟', dur:'早上 5 分钟'},
+  {id:'spinach', name:'蒜蓉菠菜', type:'morning', tags:['叶酸','叶黄素'],
+   ing:[{n:'菠菜',q:1,u:'把',cat:'蔬菜'}], season:['蒜末','盐'],
+   prep:'前一晚洗切，早上大火炒 3 分钟', dur:'早上 5 分钟',
+   tip:'绿叶菜现炒，维 C 和亚硝酸盐控制都是最优'},
+  {id:'roastPepper', name:'烤彩椒西葫芦', type:'oven', tags:['维 C'],
+   ing:[{n:'彩椒',q:2,u:'个',cat:'蔬菜'},{n:'西葫芦',q:1,u:'根',cat:'蔬菜'}], season:['橄榄油','意式香草'],
+   prep:'切块拌橄榄油，200°C 烤 18 分钟', dur:'20 分钟'},
+  {id:'tomMush', name:'番茄烩蘑菇', type:'stew', tags:['茄红素翻倍'],
+   ing:[{n:'口蘑或杂菇',q:300,u:'g',cat:'蔬菜'},{n:'番茄罐头',q:0.5,u:'罐',cat:'主食干货'}], season:['盐','黑胡椒'],
+   prep:'蘑菇煎香，加番茄罐头烩 10 分钟', dur:'15 分钟'},
+  {id:'aspara', name:'白灼芦笋', type:'morning', tags:['叶酸'],
+   ing:[{n:'芦笋',q:1,u:'把',cat:'蔬菜'}], season:['生抽','橄榄油'],
+   prep:'前一晚洗净切段，早上焯 2–3 分钟', dur:'早上 5 分钟'},
+  {id:'mixMush', name:'蒜炒杂菌', type:'morning', tags:['鲜味氨基酸'],
+   ing:[{n:'混合菌菇',q:300,u:'g',cat:'蔬菜'}], season:['蒜末','盐'],
+   prep:'前一晚撕好，早上大火炒 5 分钟', dur:'早上 7 分钟'},
+  {id:'rootVeg', name:'烤根茎蔬菜', type:'oven', tags:['β-胡萝卜素'],
+   ing:[{n:'胡萝卜',q:2,u:'根',cat:'蔬菜'},{n:'甜菜根',q:1,u:'个',cat:'蔬菜'}], season:['橄榄油','蜂蜜(可选)'],
+   prep:'切滚刀块拌橄榄油，200°C 烤 25 分钟', dur:'28 分钟'},
+  {id:'cucumber', name:'凉拌黄瓜紫洋葱', type:'nocook', tags:['生食维 C'],
+   ing:[{n:'黄瓜',q:2,u:'根',cat:'蔬菜'},{n:'紫洋葱',q:0.5,u:'个',cat:'蔬菜'}], season:['米醋','香油'],
+   prep:'前一晚拍好拌料冷藏，更入味', dur:'10 分钟'},
+  {id:'cabbage', name:'手撕包菜', type:'morning', tags:['脆嫩'],
+   ing:[{n:'包菜',q:0.5,u:'个',cat:'蔬菜'}], season:['蒜末','盐'],
+   prep:'前一晚撕好，早上大火炒 4 分钟', dur:'早上 6 分钟'},
+  {id:'cabbageSalad', name:'紫甘蓝苹果沙拉', type:'nocook', tags:['花青素','不怕隔夜'],
+   ing:[{n:'紫甘蓝',q:0.25,u:'个',cat:'蔬菜'},{n:'苹果',q:1,u:'个',cat:'蔬菜'}], season:['油醋汁','蜂蜜(可选)'],
+   prep:'切丝拌油醋汁冷藏，隔夜更脆更入味', dur:'10 分钟',
+   tip:'紫甘蓝花青素 + 苹果果胶，MIND 饮食认证的深色蔬菜'},
+  {id:'choySum', name:'白灼菜心', type:'morning', tags:['深绿叶','秋冬应季'],
+   ing:[{n:'菜心',q:300,u:'g',cat:'蔬菜'}], season:['生抽','蒜末'],
+   prep:'前一晚洗净，早上焯 3 分钟', dur:'早上 5 分钟',
+   tip:'MIND 饮食第一条就是绿叶菜每天见'}
+];
+
+const CARBS = [
+  {id:'quinoaBrown', name:'藜麦糙米饭', type:'rice', tags:['低 GI'],
+   ing:[{n:'糙米',q:150,u:'g',cat:'主食干货'},{n:'藜麦',q:50,u:'g',cat:'主食干货'}], season:[],
+   prep:'电饭煲杂粮档（或前一晚预约，泡米自动解决）', dur:'电饭煲自理',
+   tip:'预约模式设成起床前 30–40 分钟煮好'},
+  {id:'purpleBuck', name:'紫米荞麦饭', type:'rice', tags:['花青素'],
+   ing:[{n:'白米',q:100,u:'g',cat:'主食干货'},{n:'紫米',q:50,u:'g',cat:'主食干货'},{n:'荞麦米',q:50,u:'g',cat:'主食干货'}], season:[],
+   prep:'紫米荞麦提前泡 2 小时（预约模式免操心）', dur:'电饭煲自理'},
+  {id:'oatRice', name:'燕麦米杂粮饭', type:'rice', tags:['β-葡聚糖'],
+   ing:[{n:'白米',q:120,u:'g',cat:'主食干货'},{n:'燕麦米',q:80,u:'g',cat:'主食干货'}], season:[],
+   prep:'燕麦米泡 30 分钟后正常煮', dur:'电饭煲自理'},
+  {id:'chickRice', name:'鹰嘴豆杂粮饭', type:'rice', tags:['蛋白翻倍'],
+   ing:[{n:'糙米',q:150,u:'g',cat:'主食干货'},{n:'鹰嘴豆罐头',q:0.5,u:'罐',cat:'主食干货'}], season:[],
+   prep:'糙米正常煮，罐头鹰嘴豆沥干冲水直接同煮', dur:'电饭煲自理',
+   tip:'罐头免泡最省事；干豆需泡 8–12 小时但不用剥皮'},
+  {id:'potato', name:'烤/蒸土豆', type:'steam', tags:['高钾护血压'],
+   ing:[{n:'土豆',q:2,u:'个(约400g)',cat:'蔬菜'}], season:['橄榄油','盐'],
+   prep:'蒸 25 分钟，或切块拌橄榄油进烤箱（和烤菜同盘）', dur:'25 分钟',
+   tip:'薯类复热不发硬；蛋白质记得靠豆/蛋加量补回'},
+  {id:'purpleSweet', name:'蒸紫薯', type:'steam', tags:['花青素','抗性淀粉'],
+   ing:[{n:'紫薯',q:3,u:'根',cat:'蔬菜'}], season:[],
+   prep:'蒸 25 分钟', dur:'25 分钟',
+   tip:'放凉后抗性淀粉增加、GI 更低——天生适合带饭'},
+  {id:'pumpkin', name:'蒸贝贝南瓜', type:'steam', tags:['β-胡萝卜素'],
+   ing:[{n:'贝贝南瓜',q:1,u:'个',cat:'蔬菜'}], season:[],
+   prep:'切块蒸 20 分钟', dur:'20 分钟',
+   tip:'碳水密度低，要吃到谷物 1.5–2 倍体积才算一份主食'},
+  {id:'taro', name:'蒸芋头', type:'steam', tags:['温和护胃'],
+   ing:[{n:'芋头',q:2,u:'个',cat:'蔬菜'}], season:[],
+   prep:'蒸 25 分钟', dur:'25 分钟'},
+  {id:'pasta', name:'全麦意面', type:'morning', tags:['快手'],
+   ing:[{n:'全麦意面',q:160,u:'g',cat:'主食干货'}], season:['橄榄油','黑胡椒'],
+   prep:'早上煮 8 分钟过凉水，拌橄榄油防粘', dur:'早上 10 分钟'},
+  {id:'pita', name:'全麦 pita 饼', type:'nocook', tags:['免加热'],
+   ing:[{n:'全麦 pita',q:2,u:'个',cat:'主食干货'}], season:[],
+   prep:'无需预制，配沙拉直接吃', dur:'0',
+   tip:'和免加热主菜组合 = 全程不碰微波炉的午餐'},
+  {id:'corn', name:'蒸玉米', type:'steam', tags:['高纤维','夏秋应季'],
+   ing:[{n:'玉米',q:2,u:'根',cat:'蔬菜'}], season:[],
+   prep:'蒸 15 分钟', dur:'18 分钟',
+   tip:'整根带饭，办公室微波 1 分钟恢复香甜'}
+];
+
+/* ---------- 下午茶选项（菜单第四栏，具体内容随季节变化） ---------- */
+const NUT_MIX = '混合坚果（核桃/巴旦木/腰果·原味）';
+const fruitPicks = s => TEA[s].fruits.split('、').map(x => x.replace(/（.*?）/g, '')).slice(0, 3);
+const berryName = s => ['spring','summer'].includes(s) ? '蓝莓/草莓（当季鲜）' : '蓝莓（鲜或冷冻）';
+const TEA_ITEMS = [
+  {id:'nutFruit', name:'坚果 + 水果', nut:true, fruit:true,
+   detail: s => `核桃2颗+巴旦木6颗+腰果4颗≈25g/人；${fruitPicks(s)[0]}1个+${fruitPicks(s)[1]}1个（合计200–350g/人）`,
+   ings: s => [{n:NUT_MIX, q:2, u:'小把(25g)', cat:'下午茶'}, {n:fruitPicks(s)[0], q:2, u:'个', cat:'下午茶'}, {n:fruitPicks(s)[1], q:2, u:'个', cat:'下午茶'}]},
+  {id:'berryYogurt', name:'浆果酸奶杯', berry:true, dairy:true, nut:true,
+   detail: s => `无糖希腊酸奶150g/人＋${berryName(s)}一小盒(125g)＋核桃碎2颗`,
+   ings: s => [{n:'无糖希腊酸奶', q:2, u:'杯(150g)', cat:'下午茶'}, {n:'蓝莓', q:2, u:'盒(125g)', cat:'下午茶'}]},
+  {id:'berryMilk', name:'浆果 + 低脂奶', berry:true, dairy:true,
+   detail: s => `${berryName(s)}一小盒(125g/人)＋低脂奶250ml/人`,
+   ings: () => [{n:'蓝莓', q:2, u:'盒(125g)', cat:'下午茶'}, {n:'低脂牛奶', q:2, u:'盒(250ml)', cat:'下午茶'}]},
+  {id:'yogurtFruit', name:'酸奶 + 水果', dairy:true, fruit:true,
+   detail: s => `无糖酸奶1杯/人＋${fruitPicks(s)[0]}1个＋${fruitPicks(s)[2]}1个（切盒前一晚装好）`,
+   ings: s => [{n:'无糖希腊酸奶', q:2, u:'杯(150g)', cat:'下午茶'}, {n:fruitPicks(s)[0], q:2, u:'个', cat:'下午茶'}, {n:fruitPicks(s)[2], q:2, u:'个', cat:'下午茶'}]},
+  {id:'chocNut', name:'黑巧 + 坚果', dark:true, nut:true, fruit:true,
+   detail: s => `85%黑巧一小格(10g/人)＋坚果25g/人＋${fruitPicks(s)[0]}1个，解馋不升糖`,
+   ings: s => [{n:'黑巧克力85%+', q:1, u:'板', cat:'下午茶'}, {n:NUT_MIX, q:2, u:'小把(25g)', cat:'下午茶'}, {n:fruitPicks(s)[0], q:2, u:'个', cat:'下午茶'}]},
+  {id:'milkNut', name:'低脂奶 + 坚果', dairy:true, nut:true,
+   detail: () => `低脂奶250ml/人＋坚果一小把25g/人，轻负担档`,
+   ings: () => [{n:'低脂牛奶', q:2, u:'盒(250ml)', cat:'下午茶'}, {n:NUT_MIX, q:2, u:'小把(25g)', cat:'下午茶'}]},
+  {id:'teaCoffee', name:'茶/咖啡 + 水果', fruit:true, drink:true,
+   detail: s => `绿茶或黑咖啡（下午4点前喝完护睡眠）＋${fruitPicks(s)[0]}1个+${fruitPicks(s)[1]}1个`,
+   ings: s => [{n:'茶包/咖啡(无糖)', q:2, u:'份', cat:'下午茶'}, {n:fruitPicks(s)[0], q:2, u:'个', cat:'下午茶'}, {n:fruitPicks(s)[1], q:2, u:'个', cat:'下午茶'}]},
+  {id:'frozenBerry', name:'蓝莓酸奶杯', berry:true, dairy:true,
+   detail: () => `冷冻蓝莓125g/人（办公室常备，花青素几乎不损失）＋无糖酸奶1杯/人`,
+   ings: () => [{n:'蓝莓(冷冻)', q:2, u:'盒(125g)', cat:'下午茶'}, {n:'无糖希腊酸奶', q:2, u:'杯(150g)', cat:'下午茶'}]}
+];
+
+const DAYS = [
+  {name:'周一', sub:'周日预制'},
+  {name:'周二', sub:'周日预制'},
+  {name:'周三', sub:'周日预制'},
+  {name:'周四', sub:'冷冻/周三补', alt:true},
+  {name:'周五', sub:'冷冻/周三补', alt:true}
+];
+const TYPE_LABEL = {oven:'烤箱', stew:'炖锅', rice:'电饭煲', steam:'蒸锅', morning:'现做', nocook:'免做'};
+
+/* ---------- 季节与应季数据 ---------- */
+const SEASONS = [
+  {key:'spring', label:'春季', name:'春', months:[3,4,5]},
+  {key:'summer', label:'夏季', name:'夏', months:[6,7,8]},
+  {key:'autumn', label:'秋季', name:'秋', months:[9,10,11]},
+  {key:'winter', label:'冬季', name:'冬', months:[12,1,2]}
+];
+/* 食材 -> 应季月份所属季节（没列出的默认全年） */
+const SEASON_MAP = {
+  '菠菜':['spring','autumn'], '芦笋':['spring'], '秋葵':['summer'], '菜心':['autumn','winter'],
+  '西兰花':['autumn','winter'], '樱桃番茄':['summer','autumn'], '彩椒':['summer','autumn'],
+  '西葫芦':['summer','autumn'], '黄瓜':['summer','autumn'], '包菜':['spring','autumn','winter'],
+  '胡萝卜':['autumn','winter'], '甜菜根':['autumn','winter'], '口蘑或杂菇':['autumn'],
+  '混合菌菇':['autumn','winter'], '鲜香菇':['autumn','winter'], '紫甘蓝':['autumn','winter'],
+  '土豆':['autumn'], '紫薯':['autumn'], '贝贝南瓜':['autumn','winter'], '芋头':['autumn'],
+  '玉米':['summer','autumn'], '柠檬':['autumn','winter']
+};
+const TEA = {
+  spring: {fruits:'草莓、樱桃、桑葚、枇杷', note:'浆果季开场——草莓桑葚的花青素和维 C 都在线，直接当下午茶水果。'},
+  summer: {fruits:'蓝莓、桃子、葡萄、西瓜（小份）、荔枝（少）', note:'蓝莓是 MIND 饮食指定的护脑浆果，当季最新鲜也最便宜。'},
+  autumn: {fruits:'苹果、梨、猕猴桃、葡萄、冬枣、柿子（别空腹）', note:'猕猴桃维 C 约是橙子的 2 倍，换季护嗓子全靠它。'},
+  winter: {fruits:'橙子、柚子、橘子、苹果、青枣', note:'柑橘类是维 C 大户，正好对上流感季；柚子别和部分药物同食。'}
+};
+/* MIND 饮食：深色蔬菜清单（绿叶/红橙紫都算） */
+const DARK_VEGS = new Set(['roastBroc','okra','spinach','roastPepper','tomMush','aspara','rootVeg','cabbageSalad','choySum']);
+let curSeason = 'autumn';
+const $ = id => document.getElementById(id);
+const find = (arr, id) => arr.find(d => d.id === id);
+
+let week = [
+  {main:'salmon',      veg:'roastBroc',   carb:'quinoaBrown', tea:'nutFruit'},
+  {main:'chickStew',   veg:'tomMush',     carb:'purpleBuck',  tea:'berryYogurt'},
+  {main:'beefTomato',  veg:'cucumber',    carb:'quinoaBrown', tea:'yogurtFruit'},
+  {main:'mushChick',   veg:'spinach',     carb:'potato',      tea:'berryMilk'},
+  {main:'tunaEgg',     veg:'roastPepper', carb:'pita',        tea:'chocNut'}
+];
+
+/* ---------- 构建表格 ---------- */
+function buildTable() {
+  const tb = $('weekBody');
+  tb.innerHTML = '';
+  week.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    if (row.skip) tr.className = 'skipped';
+    tr.innerHTML = `
+      <td class="day-cell">${DAYS[i].name}<span class="dsub">${DAYS[i].sub}</span></td>
+      <td><select data-day="${i}" data-kind="main"></select></td>
+      <td><select data-day="${i}" data-kind="veg"></select></td>
+      <td><select data-day="${i}" data-kind="carb"></select></td>
+      <td class="tea-cell"><select data-day="${i}" data-kind="tea"></select><div class="tea-detail" id="teaD${i}"></div></td>
+      <td class="tools-cell">
+        <button class="row-dice" data-day="${i}" title="只重抽这一天的搭配">↻</button><button class="mini-btn btn-skip${row.skip ? ' on' : ''}" data-day="${i}" title="这天外食：从预制、采购和统计里剔除">外食</button><button class="mini-btn" data-day="${i}" data-dir="-1" title="和前一天对调"${i === 0 ? ' disabled' : ''}>↑</button><button class="mini-btn" data-day="${i}" data-dir="1" title="和后一天对调"${i === 4 ? ' disabled' : ''}>↓</button>
+      </td>
+      <td class="row-flag" id="flag${i}"></td>`;
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('select').forEach(sel => {
+    const arr = {main: MAINS, veg: VEGS, carb: CARBS, tea: TEA_ITEMS}[sel.dataset.kind];
+    arr.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d.id; o.textContent = d.name;
+      sel.appendChild(o);
+    });
+    sel.value = week[sel.dataset.day][sel.dataset.kind];
+    sel.addEventListener('change', () => {
+      week[sel.dataset.day][sel.dataset.kind] = sel.value;
+      update();
+    });
+  });
+  tb.querySelectorAll('.row-dice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.day, 10);
+      week[i] = {...randomRow(i), skip: week[i].skip};
+      syncSelects();
+      update();
+    });
+  });
+  tb.querySelectorAll('.btn-skip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.day, 10);
+      week[i].skip = !week[i].skip;
+      buildTable();
+      update();
+    });
+  });
+  tb.querySelectorAll('.mini-btn[data-dir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.day, 10);
+      const j = i + parseInt(btn.dataset.dir, 10);
+      if (j < 0 || j > 4) return;
+      [week[i], week[j]] = [week[j], week[i]];
+      buildTable();
+      update();
+    });
+  });
+}
+function syncSelects() {
+  document.querySelectorAll('#weekBody select').forEach(sel => {
+    sel.value = week[sel.dataset.day][sel.dataset.kind];
+  });
+}
+
+/* ---------- 随机与智能排周 ---------- */
+function sample(arr, n) {
+  const copy = arr.slice();
+  const out = [];
+  while (out.length < n && copy.length) {
+    out.push(copy.splice(Math.floor(Math.random() * copy.length), 1)[0]);
+  }
+  return out;
+}
+function randomRow(excludeDay) {
+  const usedMains = week.filter((r, i) => i !== excludeDay).map(r => r.main);
+  const poolM = MAINS.filter(d => !usedMains.includes(d.id));
+  const usedVegs = week.filter((r, i) => i !== excludeDay).map(r => r.veg);
+  const poolV = VEGS.filter(d => !usedVegs.includes(d.id));
+  const usedCarbs = week.filter((r, i) => i !== excludeDay).map(r => r.carb);
+  const poolC = CARBS.filter(d => !usedCarbs.includes(d.id));
+  const usedTeas = week.filter((r, i) => i !== excludeDay).map(r => r.tea);
+  const poolT = TEA_ITEMS.filter(d => !usedTeas.includes(d.id));
+  return {
+    main: (poolM.length ? sample(poolM, 1)[0] : sample(MAINS, 1)[0]).id,
+    veg: (poolV.length ? sample(poolV, 1)[0] : sample(VEGS, 1)[0]).id,
+    carb: (poolC.length ? sample(poolC, 1)[0] : sample(CARBS, 1)[0]).id,
+    tea: (poolT.length ? sample(poolT, 1)[0] : sample(TEA_ITEMS, 1)[0]).id
+  };
+}
+function validSmart(w) {
+  const mains = w.map(r => find(MAINS, r.main));
+  const red = mains.filter(d => d.red).length;
+  const fish = mains.filter(d => d.fish).length;
+  const plant = mains.filter(d => d.plant).length;
+  const morningMains = mains.filter(d => d.type === 'morning').length;
+  if (red > 2 || fish < 1 || plant < 1 || morningMains > 2) return false;
+  // 每天早上现做项 ≤ 2（主菜+蔬菜+主食合计）
+  for (let i = 0; i < 5; i++) {
+    const cnt = [find(MAINS, w[i].main), find(VEGS, w[i].veg), find(CARBS, w[i].carb)]
+      .filter(d => d.type === 'morning').length;
+    if (cnt > 2) return false;
+  }
+  return true;
+}
+/* 下午茶整周分配：浆果 ≥ 2 天、奶制品 ≥ 2 天、其余换着来 */
+function assignTeas() {
+  const sh = sample(TEA_ITEMS, TEA_ITEMS.length);
+  const teas = [];
+  const berryP = sh.filter(t => t.berry);
+  const dairyP = sh.filter(t => t.dairy && !t.berry);
+  const restP = sh.filter(t => !t.berry && !t.dairy);
+  teas.push(berryP[0]);
+  teas.push(berryP[1] || restP.shift() || sh.find(t => !teas.includes(t)));
+  while (teas.filter(t => t.dairy).length < 2) {
+    const d = dairyP.shift() || sh.find(t => t.dairy && !teas.includes(t));
+    if (!d) break;
+    teas.push(d);
+  }
+  while (teas.length < 5) teas.push(restP.shift() || sh.find(t => !teas.includes(t)) || sh[0]);
+  return sample(teas, teas.length).map(t => t.id);
+}
+function smartWeek(inv) {
+  const hasInv = inv && inv.size > 0;
+  const coverage = d => hasInv ? d.ing.filter(i => inv.has(i.n)).length / d.ing.length : 0;
+  /* 应季度：食材里应季占比（无季节信息的食材记 0.5 中性分） */
+  const seasonality = d => {
+    const list = d.ing.map(i => SEASON_MAP[i.n]).filter(Boolean);
+    if (!list.length) return 0.5;
+    return list.filter(s => s.includes(curSeason)).length / list.length;
+  };
+  const weekScore = w => {
+    let s = 0, n = 0;
+    w.forEach(r => [find(MAINS, r.main), find(VEGS, r.veg), find(CARBS, r.carb)].forEach(d => {
+      s += (hasInv ? coverage(d) : 0) + seasonality(d) * 0.6; n++;
+    }));
+    return s / n;
+  };
+  let best = null, bestScore = -1;
+  for (let t = 0; t < 800; t++) {
+    const ms = sample(MAINS, 5), vs = sample(VEGS, 5), cs = sample(CARBS, 5);
+    const w = ms.map((m, i) => ({main: m.id, veg: vs[i].id, carb: cs[i].id}));
+    if (!validSmart(w)) continue;
+    const sc = weekScore(w);
+    if (sc > bestScore) { bestScore = sc; best = w; }
+  }
+  if (!best) {
+    for (let t = 0; t < 300; t++) {
+      const ms = sample(MAINS, 5), vs = sample(VEGS, 5), cs = sample(CARBS, 5);
+      const w = ms.map((m, i) => ({main: m.id, veg: vs[i].id, carb: cs[i].id}));
+      const sc = weekScore(w);
+      if (sc > bestScore) { bestScore = sc; best = w; }
+    }
+  }
+  // 鱼类主菜尽量排前三天：越不抗放的越早吃
+  best.sort((a, b) => (find(MAINS, b.main).fish ? 1 : 0) - (find(MAINS, a.main).fish ? 1 : 0));
+  // 下午茶整周分配：浆果 ≥ 2 天、奶制品 ≥ 2 天
+  const teaIds = assignTeas();
+  return best.map((r, i) => ({...r, tea: teaIds[i]}));
+}
+
+/* ---------- 渲染 ---------- */
+function morningMinutes(dishes) {
+  let min = 0;
+  dishes.forEach(d => {
+    const m = (d.dur || '').match(/早上\s*(\d+)/);
+    if (d.type === 'morning' && m) min += parseInt(m[1], 10);
+    else if (d.type === 'morning') min += 8;
+  });
+  return min;
+}
+
+function update() {
+  const activeIdx = week.map((r, i) => i).filter(i => !week[i].skip);
+  const grid = activeIdx.map(i => ({
+    i,
+    main: find(MAINS, week[i].main),
+    veg: find(VEGS, week[i].veg),
+    carb: find(CARBS, week[i].carb),
+    tea: find(TEA_ITEMS, week[i].tea) || TEA_ITEMS[0]
+  }));
+  const teasActive = grid.map(g => g.tea);
+  const allDishes = grid.flatMap(g => [g.main, g.veg, g.carb]);
+  const nActive = grid.length;
+
+  /* 每行早上工作量标记 + 下午茶具体内容 */
+  for (let i = 0; i < 5; i++) {
+    const el = $('flag' + i);
+    const td = $('teaD' + i);
+    if (el) {
+      if (week[i].skip) { el.innerHTML = '<b style="color:var(--coral-600)">外食 · 已剔除</b>'; }
+      else {
+        const g = grid.find(x => x.i === i);
+        const min = morningMinutes([g.main, g.veg, g.carb]);
+        const nocook = [g.main, g.veg, g.carb].filter(d => d.type === 'nocook').length;
+        let flag = '';
+        if (nocook === 3) flag = '免加热日';
+        else if (min >= 15) flag = `<b>早 ${min} 分钟</b> · 建议前一天早点睡`;
+        else if (min > 0) flag = `早 ${min} 分钟`;
+        else flag = '拿盒就走';
+        el.innerHTML = flag;
+      }
+    }
+    if (td) {
+      const t = find(TEA_ITEMS, week[i].tea) || TEA_ITEMS[0];
+      td.innerHTML = week[i].skip ? '' : t.detail(curSeason);
+    }
+  }
+
+  /* 一周总览 */
+  const mains = grid.map(g => g.main);
+  const fishN = mains.filter(d => d.fish).length;
+  const redN = mains.filter(d => d.red).length;
+  const plantN = mains.filter(d => d.plant).length;
+  const distinctMains = new Set(mains.map(d => d.id)).size;
+  const steamN = grid.filter(g => g.carb.type === 'steam').length;
+  const riceN = grid.filter(g => g.carb.type === 'rice').length;
+  const fishCls = fishN >= 2 ? 'ok' : 'warn';
+  const redCls = redN <= 2 ? 'ok' : 'warn';
+  const darkN = grid.filter(g => DARK_VEGS.has(g.veg.id)).length;
+  const ingCount = new Set([
+    ...allDishes.flatMap(d => d.ing.map(i => i.n)),
+    ...teasActive.flatMap(t => t.ings(curSeason).map(i => i.n))
+  ]).size;
+  const berryT = teasActive.filter(t => t.berry).length;
+  const dairyT = teasActive.filter(t => t.dairy).length;
+  const stats = nActive === 0 ? [] : [
+    {k:'🐟 鱼类天数', v:`${fishN} / ${nActive}`, cls:fishCls, note: fishN >= 2 ? '达标' : '建议 ≥ 2 天'},
+    {k:'🥩 红肉天数', v:`${redN} / ${nActive}`, cls:redCls, note: redN <= 2 ? '未超量' : '超了，建议换掉'},
+    {k:'🥬 深色蔬菜', v:`${darkN} / ${nActive}`, cls: darkN >= 3 ? 'ok' : 'warn', note: darkN >= 3 ? 'MIND 达标' : '建议 ≥ 3 天'},
+    {k:'🫘 植物蛋白日', v:`${plantN} 天`, cls:'ok', note:'零胆固醇高纤维'},
+    {k:'🫐 浆果加餐', v:`${berryT} / ${nActive}`, cls: berryT >= 2 ? 'ok' : 'warn', note: berryT >= 2 ? 'MIND 达标' : '建议 ≥ 2 天'},
+    {k:'🥛 奶制品加餐', v:`${dairyT} 份`, cls: dairyT >= 2 ? 'ok' : 'warn', note:'DASH 每天 2–3 份'},
+    {k:'🔁 主菜重复', v: distinctMains === nActive ? '无' : '有重复', cls: distinctMains === nActive ? 'ok' : 'warn', note:''},
+    {k:'🍚 主食结构', v:`谷物 ${riceN} · 薯类 ${steamN}`, cls:'ok', note:'轮换最优'},
+    {k:'🧺 食材种类', v:`${ingCount} 种`, cls: ingCount >= 20 ? 'ok' : 'warn', note:'指南建议每周 ≥ 25'}
+  ];
+  $('statGrid').innerHTML = stats.map(s =>
+    `<div class="stat"><div class="k">${s.k}</div><div class="v ${s.cls}">${s.v}<small> ${s.note}</small></div></div>`
+  ).join('');
+
+  const notes = [];
+  if (nActive > 0) {
+    if (fishN === 0) notes.push('这周一条鱼都没有——omega-3 是抗炎主力，建议把某天的主菜换成三文鱼 / 鳕鱼 / 金枪鱼。');
+    else if (fishN === 1) notes.push('鱼类只有 1 天，能加到 2 天更好；不想做两次鱼就用一次金枪鱼沙拉（免烹饪）。');
+    if (redN > 2) notes.push(`红肉 ${redN} 天超过每周 2 次的建议上限，和「世界癌症研究基金会」的推荐量不一致，建议替换。`);
+    if (distinctMains < nActive) notes.push('有主菜在带饭日里重复出现——连吃两天可以接受，但第三天会腻，建议换掉。');
+    if (darkN < Math.min(3, nActive)) notes.push(`深色蔬菜只有 ${darkN} 天——MIND 饮食要求绿叶菜每天见，建议把 1–2 天换成菠菜 / 西兰花 / 菜心 / 紫甘蓝这类深色款。`);
+    if (ingCount < 20) notes.push(`本周食材只有 ${ingCount} 种，离中国膳食指南「每周 ≥ 25 种」还差点——换一两道没吃过的菜，多样性直接拉满。`);
+    if (berryT < Math.min(2, nActive)) notes.push(`浆果加餐只有 ${berryT} 天——MIND 饮食要求每周 ≥ 2 次，把某天下午茶换成「浆果酸奶杯」或「蓝莓酸奶杯」。`);
+    if (dairyT < 2) notes.push(`奶制品加餐只有 ${dairyT} 天——DASH 建议每天 2–3 份，午餐没排奶的话，下午茶最好补上 2 天以上。`);
+  }
+  const heavyDays = grid.map(g => ({i: g.i, min: morningMinutes([g.main, g.veg, g.carb])})).filter(d => d.min >= 15);
+  if (heavyDays.length) notes.push(`${heavyDays.map(d => DAYS[d.i].name).join('、')} 早上要 15 分钟以上现做，起不来的话把那天的「现做」菜换成烤/炖类。`);
+  const riceVariants = new Set(grid.filter(g => g.carb.type === 'rice').map(g => g.carb.id));
+  if (riceVariants.size >= 3) notes.push('这周出现了 3 种以上不同的杂粮饭：周日煮 3 锅不现实。建议统一成一款吃前三天（冷冻的后两天直接微波），或周四周五改用电饭煲预约当天煮。');
+  const skipN = 5 - nActive;
+  if (skipN > 0) notes.push(`本周有 ${skipN} 天外食，这些天已从预制流程、采购清单和营养统计里剔除；想恢复哪天带饭，把那天的「外食」再点一下即可。`);
+  $('weekNote').innerHTML = notes.length
+    ? '<b>本周点评：</b>' + notes.join(' ')
+    : '<b>结构优秀：</b>主菜不重样、红肉未超量、鱼和植物蛋白都在位，直接照下面的流程执行即可。';
+
+  /* 预制流程：按设备聚合，自动分批 */
+  const sunDishes = [], thuFriDishes = [];
+  grid.forEach(g => {
+    [g.main, g.veg, g.carb].forEach(d => {
+      if (['oven', 'stew', 'steam', 'rice'].includes(d.type)) {
+        (g.i >= 3 ? thuFriDishes : sunDishes).push({...d, day: DAYS[g.i].name});
+      }
+    });
+  });
+  const byType = (arr, t) => arr.filter(d => d.type === t);
+  const steps = [];
+  if (nActive === 0) {
+    steps.push(['本周全部外食', '没有需要预制的菜。想恢复哪天带饭，把那行的「外食」点掉即可，流程和采购清单会自动回来。']);
+  }
+  const uniq = (arr) => {
+    const seen = new Set(), out = [];
+    arr.forEach(d => { if (!seen.has(d.id)) { seen.add(d.id); out.push(d); } });
+    return out;
+  };
+
+  if (nActive > 0) steps.push(['🧺 周日 10:00 · 收菜 & 腌制', '洗切全部硬质蔬菜；烤制主菜抹料腌制；需要泡的杂粮下锅预约或泡水']);
+  const stews = uniq(byType(sunDishes, 'stew'));
+  if (stews.length) {
+    steps.push(['🍲 周日 10:30 · 炖锅 × ' + stews.length, stews.map(d => `<b>${d.name}</b>（${d.prep}）`).join('<br>') + (stews.length > 1 ? '<br>两锅并行或先后炖，取最长时间排程，期间都不用管' : '')]);
+  }
+  const rices = uniq(byType(sunDishes, 'rice'));
+  if (rices.length) steps.push(['🍚 周日 10:40 · 电饭煲', rices.map(d => `<b>${d.name}</b>：${d.prep}`).join('<br>') + (rices.length > 1 ? '<br>多种饭：先煮周一周二吃的，剩余米周三晚预约' : '')]);
+  const ovens = uniq(byType(sunDishes, 'oven'));
+  if (ovens.length) steps.push(['🔥 周日 11:00 · 烤箱 200°C', ovens.map(d => `<b>${d.name}</b>（${d.prep}）`).join('<br>') + (ovens.length > 1 ? '<br>分盘同炉错层，一次预热全出炉' : '')]);
+  const steams = uniq(byType(sunDishes, 'steam'));
+  if (steams.length) steps.push(['♨️ 周日 11:00 · 蒸锅', steams.map(d => `<b>${d.name}</b>（${d.prep}）`).join('<br>')]);
+  const tfStews = uniq(byType(thuFriDishes, 'stew')), tfOvens = uniq(byType(thuFriDishes, 'oven')),
+        tfSteams = uniq(byType(thuFriDishes, 'steam')), tfRices = uniq(byType(thuFriDishes, 'rice'));
+  if (nActive > 0) steps.push(['🧊 周日 12:00 · 分装（关键一步）', `周一–周三的量 → 冷藏（3 天安全期内吃完）；<b>周四–周五的量 → 直接入冷冻</b>` +
+    (thuFriDishes.length ? `。冷冻清单：${uniq(thuFriDishes).map(d => d.name).join('、')}` : '') +
+    '<br>米饭类冷冻后微波复热口感接近现煮，是最稳的方案']);
+  if (nActive > 0) steps.push(['🌙 周三晚 · 15 分钟补货', '① 把周四周五的冷冻盒移到冷藏解冻；② 洗切后两天的现做蔬菜、腌周四的现做主菜；③ 如果周日电饭煲只煮了 3 天的饭，现在预约周四的米<br><b>周三晚也是「纠错窗口」</b>：前半周没按计划吃、临时换了菜，都在这一步重新对齐——换菜直接改上面的下拉，流程会自动重算']);
+  const morningAll = uniq(allDishes.filter(d => d.type === 'morning'));
+  if (morningAll.length) {
+    steps.push(['🍳 每天睡前 10 分钟', morningAll.map(d => `<b>${d.name}</b>：${d.prep.replace(/早上/, '')}`).join('<br>') + '<br>（列出的都是本周出现的现做项，哪天吃哪天备）']);
+  }
+  if (nActive > 0) steps.push(['🫐 每天睡前 · 顺手装下午茶（5 分钟）', '把<b>第二天下午茶</b>一并装好：坚果一小把分装小盒（25g，防氧化也防多吃）；应季水果洗净装盒；当天排了酸奶/奶的确认冰箱有货；冷冻蓝莓分一小盒移冷藏。早上和便当一起抓上就走']);
+  const nocookAll = uniq(allDishes.filter(d => d.type === 'nocook'));
+  if (nocookAll.length) steps.push(['📦 免预制项', nocookAll.map(d => `<b>${d.name}</b>：${d.prep}`).join('<br>')]);
+
+  $('timeline').innerHTML = steps.map(s => `<div class="tstep${s[0].includes('周三') ? ' wed' : ''}"><div class="t">${s[0]}</div><div class="d">${s[1]}</div></div>`).join('');
+
+  /* 采购清单：全周合并去重（含下午茶） */
+  const agg = {};
+  const seasonSet = new Set();
+  allDishes.forEach(d => {
+    d.ing.forEach(i => {
+      const key = i.n + '|' + i.cat;
+      if (!agg[key]) agg[key] = {n:i.n, cat:i.cat, q:0, u:i.u};
+      agg[key].q += i.q;
+    });
+    d.season.forEach(s => seasonSet.add(s));
+  });
+  /* 下午茶食材同样进聚合：和其他菜一样的去重合并规则 */
+  teasActive.forEach(t => {
+    t.ings(curSeason).forEach(i => {
+      const key = i.n + '|' + i.cat;
+      if (!agg[key]) agg[key] = {n:i.n, cat:i.cat, q:0, u:i.u};
+      agg[key].q += i.q;
+    });
+  });
+  const cats = [
+    {key:'蛋白', label:'🍗 蛋白区', color:'var(--coral-600)'},
+    {key:'蔬菜', label:'🥕 蔬菜区', color:'var(--green-800)'},
+    {key:'主食干货', label:'🌾 主食 & 罐头', color:'var(--amber-600)'},
+    {key:'下午茶', label:'🍇 下午茶 & 水果', color:'var(--blue-600)'},
+    {key:'调味', label:'🧂 调味 & 香料（常备即可）', color:'var(--blue-600)'}
+  ];
+  let shopHtml = '';
+  const fmtQ = (q, u) => {
+    const s = (q % 1 === 0) ? q : q.toFixed(1);
+    return s + u;
+  };
+  const seasonOf = n => SEASON_MAP[n];
+  cats.forEach(c => {
+    const items = Object.values(agg).filter(i => i.cat === c.key);
+    const lis = items.map(i => {
+      const have = invSet.has(i.n);
+      const sea = seasonOf(i.n);
+      const sb = sea ? (sea.includes(curSeason) ? ' <span class="seasonal">应季</span>' : ' <span class="seasonal offseason">非当季</span>') : '';
+      return `<li><b>${i.n}</b>${sb} <span class="q${have ? ' have' : ''}">${have ? '冰箱有 ✓ 免买' : '× ' + fmtQ(i.q, i.u)}</span></li>`;
+    }).join('');
+    const sLis = c.key === '调味' && seasonSet.size
+      ? Array.from(seasonSet).map(s => `<li><b>${s}</b> <span class="q">适量</span></li>`).join('') : '';
+    if (lis || sLis) shopHtml += `<div class="shop-cat"><h4 style="color:${c.color}">${c.label}</h4><ul>${lis}${sLis}</ul></div>`;
+  });
+  /* 下午茶补充说明：应季水果全清单（随季节联动） */
+  if (nActive > 0) {
+    const t2 = TEA[curSeason];
+    const berryFresh = ['spring','summer'].includes(curSeason);
+    shopHtml += `<div class="shop-cat"><h4 style="color:var(--blue-600)">🫖 下午茶说明</h4><ul>` +
+      `<li><b>${SEASONS.find(x => x.key === curSeason).name}季水果全清单</b> <span class="q">${t2.fruits}——清单里只列了本季前几样，可任选替换</span></li>` +
+      `<li><b>浆果</b> <span class="q">${berryFresh ? '正当季，买鲜蓝莓/草莓最划算' : '非当季用冷冻蓝莓（花青素几乎不损失），MIND 每周 ≥ 2 次'}</span></li>` +
+      `<li><b>吃的时间</b> <span class="q">下午 3–4 点；熬夜加班留一半坚果/酸奶到晚上八九点</span></li></ul></div>`;
+  }
+  $('shopGrid').innerHTML = shopHtml;
+  const itemCount = Object.keys(agg).length + seasonSet.size;
+  const haveCount = Object.values(agg).filter(i => invSet.has(i.n)).length;
+  const sObj = SEASONS.find(x => x.key === curSeason);
+  const inSeasonNow = Object.values(agg).filter(i => i.cat === '蔬菜' && (SEASON_MAP[i.n] || []).includes(curSeason)).map(i => i.n);
+  $('shopSub').innerHTML = nActive === 0
+    ? '本周没有带饭日，无需采购。'
+    : `两人份 × ${nActive} 个带饭日，${nActive * 3} 道菜 + ${nActive} 份下午茶的食材已合并去重（${itemCount} 项${haveCount ? `，其中 ${haveCount} 项冰箱已有，标 ✓ 的不用买` : ''}）。` +
+      (inSeasonNow.length ? `<br><span style="color:var(--teal-600)">${sObj.label}应季优先：${inSeasonNow.join('、')}——当季的更新鲜、更便宜、农残和储存损耗都更低。</span>` : '');
+
+  /* 小贴士：全周相关才出现 */
+  const tips = [];
+  const badge = (t, c) => `<span class="badge" style="background:${c}22;color:${c}">${t}</span>`;
+  const seenTips = new Set();
+  allDishes.forEach(d => {
+    if (d.tip && !seenTips.has(d.tip)) {
+      seenTips.add(d.tip);
+      tips.push({tag:d.name, color:'#8B6A33', text:d.tip});
+    }
+  });
+  if (fishN >= 1) tips.push({tag:'鱼类复热', color:'#5A6259', text:'鱼复热 1 分钟即停，中心温热就出炉；烤箱版烤到八成熟，中午微波正好全熟不柴'});
+  if (thuFriDishes.length) tips.push({tag:'冷冻分批', color:'#56705F', text:'周四周五的菜周日做好直接冷冻，周三晚移冷藏——别把 5 天的量全放冷藏，第 4 天就过安全线了'});
+  if (JSON.stringify(allDishes).includes('鹰嘴豆')) tips.push({tag:'鹰嘴豆', color:'#6B7048', text:'罐头沥干冲水直接用，免泡免剥皮；干豆才需要提前泡 8–12 小时'});
+  const hasMorningVeg = grid.some(g => g.veg.type === 'morning');
+  if (hasMorningVeg) tips.push({tag:'现做蔬菜', color:'#6B7048', text:'前一晚洗净切好、垫厨房纸装保鲜盒冷藏，早上 5 分钟出锅，中午口感如新'});
+  if (riceN > 0) tips.push({tag:'主食', color:'#8B6A33', text:'电饭煲预约：前一晚放米，设成起床前 30–40 分钟煮好（预约 ≤ 10 小时，夏天 ≤ 8 小时）；水量比白米多 10–20%'});
+  if (steamN > 0) tips.push({tag:'薯类主食', color:'#8B6A33', text:'薯类蛋白质低于谷物，吃薯类的日子把豆类或鸡蛋加量，蛋白就补回来了'});
+  if (ovens.length >= 2 || (ovens.length + steams.length) >= 2) tips.push({tag:'烤箱', color:'#5A6259', text:'多个烤制食材可以同盘或同炉错层，一次预热做完，省时省电'});
+  const sObj2 = SEASONS.find(x => x.key === curSeason);
+  tips.push({tag:'下午茶', color:'#5A6259', text:'睡前顺手装好明天的下午茶：坚果 25g 分装、水果洗净、酸奶冷藏，早上和便当一起拿。下午 3–4 点吃；熬夜加班把坚果和酸奶留一半到晚上八九点，比外卖薯片扛饿且不促炎。'});
+  tips.push({tag:sObj2.name + '季应季', color:'#56705F', text:`现在是${sObj2.name}季（${sObj2.months.join('–')} 月）：应季食材更新鲜便宜、营养密度也更高；标「非当季」的可以用大棚款，或换成当季同类（比如夏天的黄瓜换秋冬的菜心）。`});
+  $('tipsBox').innerHTML = tips.length
+    ? tips.map(t => `<div class="tip">${badge(t.tag, t.color)}<div>${t.text}</div></div>`).join('')
+    : '<div class="tip"><div>这周没有特别注意事项，照流程走就行。</div></div>';
+}
+
+/* ---------- 事件 ---------- */
+const invSet = new Set();
+const INV_CATS = [
+  {key:'蛋白', label:'🍗 蛋白（肉 / 鱼 / 蛋 / 豆腐）', color:'var(--coral-600)'},
+  {key:'蔬菜', label:'🥕 蔬菜', color:'var(--green-800)'},
+  {key:'主食干货', label:'🌾 主食 / 罐头 / 豆', color:'var(--amber-600)'}
+];
+function buildInv() {
+  const groups = {};
+  [...MAINS, ...VEGS, ...CARBS].forEach(d => d.ing.forEach(i => {
+    (groups[i.cat] = groups[i.cat] || []).push(i.n);
+  }));
+  $('invBox').innerHTML = INV_CATS.map(c => {
+    const names = [...new Set(groups[c.key] || [])];
+    if (!names.length) return '';
+    return `<div class="inv-group"><h4 style="color:${c.color}">${c.label}</h4><div class="chips">` +
+      names.map(n => `<span class="chip" data-n="${n}">${n}</span>`).join('') + '</div></div>';
+  }).join('');
+  $('invBox').querySelectorAll('.chip').forEach(ch => {
+    ch.addEventListener('click', () => {
+      const n = ch.dataset.n;
+      if (invSet.has(n)) { invSet.delete(n); ch.classList.remove('on'); }
+      else { invSet.add(n); ch.classList.add('on'); }
+      $('invHint').textContent = invSet.size ? `已勾 ${invSet.size} 项——点「按冰箱排周」优先消耗它们` : '还没勾选。列表只包含菜谱里用得到的食材，不用翻配料表。';
+      update();
+    });
+  });
+}
+function applyWeek(w) {
+  week = w.map((r, i) => ({...r, skip: week[i] ? week[i].skip : false}));
+  buildTable();
+  update();
+}
+$('btnSmart').addEventListener('click', () => applyWeek(smartWeek()));
+$('btnRandom').addEventListener('click', () => {
+  const vs = sample(VEGS, 5), cs = sample(CARBS, 5), ts = assignTeas();
+  applyWeek(sample(MAINS, 5).map((m, i) => ({main: m.id, veg: vs[i].id, carb: cs[i].id, tea: ts[i]})));
+});
+$('btnFridge').addEventListener('click', () => {
+  if (!invSet.size) { $('invHint').textContent = '先在上面勾几个冰箱里有的食材，再点这个按钮。'; return; }
+  applyWeek(smartWeek(invSet));
+});
+$('btnClearInv').addEventListener('click', () => {
+  invSet.clear();
+  $('invBox').querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  $('invHint').textContent = '已清空。';
+  update();
+});
+
+/* ---------- 季节选择 ---------- */
+const SEASON_ICON = {spring:'🌸', summer:'☀️', autumn:'🍂', winter:'❄️'};
+function renderHeroSeason() {
+  document.body.className = 's-' + curSeason;
+}
+function buildSeasonChips() {
+  const m = new Date().getMonth() + 1;
+  curSeason = SEASONS.find(s => s.months.includes(m)).key;
+  const box = $('seasonChips');
+  box.innerHTML = '<span style="font-size:12.5px;color:var(--ink-3)">现在是什么季节（影响应季标记、排菜偏好和下午茶水果）：</span>' +
+    SEASONS.map(s => `<span class="schip s-${s.key}${s.key === curSeason ? ' on' : ''}" data-s="${s.key}"><span class="si">${SEASON_ICON[s.key]}</span>${s.label} · ${s.months[0]}–${s.months[s.months.length - 1]}月</span>`).join('');
+  box.querySelectorAll('.schip').forEach(ch => {
+    ch.addEventListener('click', () => {
+      curSeason = ch.dataset.s;
+      box.querySelectorAll('.schip').forEach(x => x.classList.toggle('on', x.dataset.s === curSeason));
+      renderHeroSeason();
+      update();
+    });
+  });
+  renderHeroSeason();
+}
+
+buildTable();
+buildInv();
+buildSeasonChips();
+update();
+</script>
+</body>
+</html>
